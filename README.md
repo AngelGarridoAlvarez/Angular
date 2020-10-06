@@ -287,7 +287,7 @@ Paralelamente creamos un botón en la vista del componente que ejecute el métod
 
 Cada vez que pulsemos el botón se va a ejecutar el DoCheck también.
 
-### 5.2 OnDestroy - *ngIf
+### 5.2 OnDestroy
 * Se ejecuta cuando se elimina la instancia de un componente
 * Se ejecuta cuando se elimine un componente dentro de su cliclo vida
 * Hay que importarlo, implmentarlo y ejecutarlo en el archivo del componente
