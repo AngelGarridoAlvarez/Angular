@@ -2,9 +2,13 @@
 
 ## INDICE
 
-[1. Principaes comandos de Angular](#id1)
-[1. Principaes comandos de Angular](#id2)
-[1. Principaes comandos de Angular](#id3)
+1. [Principaes comandos de Angular](#id1)
+2. [Estructura de archivos Angular](#id2)
+3. [Elementos que conforman una APP de Angular](#id3)
+4. [Crear componentes](#id4)
+5. [Hooks - Eventos durante el ciclo de vida del componente](#id5)
+6. [Clases y Modelo](#id6)
+7. [Directivas](#id7)
 
 ## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
@@ -57,7 +61,7 @@ ng serve
     * controlan que se vean elementos o no, dan estilos a elementos, etc.
     * Son nuevos tributos que se le aplican a nuestra plantilla o vista
     
-## 4. Crear componentes:
+## 4. Crear componentes:<a name="id4"></a>
 
 Un componente es una parte de nuestra aplicación que se ve en pantalla.
 
@@ -189,7 +193,7 @@ ng g component my-new-component
 * Definir una carpeta de "components" donde tengamos todos los componentes.
 * Definir una carpeta de "components" con las clases y una de views donde tuvieramos sus plantillas.
 
-## 5. Hooks - Eventos durante el ciclo de vida del componente
+## 5. Hooks - Eventos durante el ciclo de vida del componente<a name="id5"></a>
 
 * Son eventos del ciclo de vida del componente
 * Son eventos que se ejecuntan en un momento dado del ciclo de vida del componente
@@ -384,7 +388,7 @@ export class AppComponent {
 Ahora cada vez que pulsemos sobre ocultar videojuegos se ejecutará ngOnDestroy() . También se ejecutará ngDoCheck() al detectar cambios en el componente.
 
 
-## 6. Clases y Modelos
+## 6. Clases y Modelos<a name="id6"></a>
 
 ### 6.1. Modelo de datos
 * Es una clase con una serie de propiedades que representan a un entidad
@@ -546,4 +550,4 @@ En la vista de zapatillas vamos a mostrar el array de zapatillas que hemos cread
 </ul>
 ```
 
-## Directivas
+## 7. Directivas<a name="id7"></a>
