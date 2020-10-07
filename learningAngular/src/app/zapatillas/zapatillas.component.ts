@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Zapatilla} from "../models/zapatilla";
+import { Zapatilla } from "../models/zapatilla";
+import {newArray} from "@angular/compiler/src/util";
 
 @Component({
   selector: 'zapatillas',
@@ -9,9 +10,14 @@ import { Zapatilla} from "../models/zapatilla";
 export class ZapatillasComponent {
   public  titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
   public zapatillas: Array<Zapatilla>;
+  public marcas: String[];
+  public color: string;
 
   constructor() {
+    this.color = 'blue';
+    this.marcas = new Array();
     this.zapatillas = [
+      new Zapatilla('Ochenteras', 'Rebook', 'red and white', 59.95,false),
       new Zapatilla('Air Jordan', 'Nike', 'black', 119.90,true),
       new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90,true),
       new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90,false),
@@ -20,6 +26,16 @@ export class ZapatillasComponent {
   }
 
   ngOnInit(){
-    console.log(this.zapatillas)
+    console.log(this.zapatillas);
+
+    this.getMarcas();
+  }
+
+  //El método getMarcas mete las marcas sin repetir en el array marcas.
+  getMarcas(){
+    this.zapatillas.forEach((zapatilla, index) => {
+      if(this.marcas.indexOf(zapatilla.marca) < 0) { //En el caso de que no encuentre dentro del array marca la marca de zapatilla, indexOf(zapatilla.marca) será -1, solo en ese caso mete la marca en el array y así no se repite
+        this.marcas.push(zapatilla.marca);
+      }})
   }
 }
