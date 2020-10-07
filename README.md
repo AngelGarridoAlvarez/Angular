@@ -1,5 +1,10 @@
 # Angular
 
+Todos los archivos de este repositorio han sido completamente escritos por Ángel Garrido Álvarez. En estos documentos repaso los fundamentos de Angular que quedan reflejados en este archivo README.md que explica lo que se ha hecho en la carpeta learningAngular.
+
+El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender JS, jQuery, Angular, NodeJS](https://www.udemy.com/course/master-en-javascript-aprender-js-jquery-angular-nodejs-y-mas/) de Víctor Robles, por lo que la mayor parte del contenido proviene de esta fuente.
+
+
 ## INDICE
 
 1. [Principaes comandos de Angular](#id1)
@@ -8,7 +13,9 @@
 4. [Crear componentes](#id4)
 5. [Hooks - Eventos durante el ciclo de vida del componente](#id5)
 6. [Clases y Modelo](#id6)
-7. [Directivas](#id7)
+7. [Directivas estructurales](#id7)
+    * Condicional *ngIf - Estilo [ngStyle] - Bucle *ngFor - *ngSwitch
+8. [Enlace de datos - Data Binding en Angular](#id8)
 
 ## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
@@ -551,3 +558,277 @@ En la vista de zapatillas vamos a mostrar el array de zapatillas que hemos cread
 ```
 
 ## 7. Directivas<a name="id7"></a>
+
+* Directiva: es una funcionalidad que vamos a tener en nuestras vistas o en nuestras plantillas.
+* Ejemplo: la etiqueta de un componente.
+* Funcionalidades:
+    * Estrucuturas de control/Bucles
+    * Eventos
+    * Condicionales
+    * ...
+    
+### 7.1 Directiva Condicional ngIf()
+
+Hacemos una condición para que el precio de una deportiva cuando sea menor a 80€ se marque en verde y que ponga "OFERTA", y para que cuando esté agotado lo marque en rojo.
+
+**src/app/zapatillas/zapatillas.component.html**
+```html
+<h2>{{ titulo }}</h2>
+<p>Las zapatillas tienen que ir a juego con tu personalidad</p>
+<ul>
+
+  <!-- Hacemos un ternario para determinar el color del texto: -->
+  <li *ngFor="let deportiva of zapatillas">{{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€
+    <span *ngIf="deportiva.precio <= 80"
+          [style.background]="deportiva.precio < 80 ? '#0acc37' : 'transparent'">
+      <strong>¡OFERTA!</strong></span>
+    <span *ngIf="deportiva.stock == false"
+          [style.background]="deportiva.stock == false ? 'red' : 'transparent'">
+      <strong>Agotado</strong></span>
+  </li>
+
+  <!-- Otra forma de hacerlo con [ngStyle]:
+  <li *ngFor="let deportiva of zapatillas">{{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€
+    <span *ngIf="deportiva.precio <= 80"  [ngStyle]="{'color':'#0acc37'}"><strong>¡OFERTA!</strong></span>
+    <span *ngIf="deportiva.stock == false" [ngStyle]="{'color':'red'}"><strong>Agotado</strong></span>
+  </li>
+  */-->
+</ul>
+```
+### 7.2 Directiva Bucle ngFor()
+
+* Recorrer un array y mostrarlo en nuestra vista con un bucle
+
+Creamos el método marcas en zapatillas.component para recorrer el array de objetos zapatillas y crearme un array de marcas
+
+**zapatillas.component.ts**
+```ts
+import { Component } from "@angular/core";
+import { Zapatilla } from "../models/zapatilla";
+import {newArray} from "@angular/compiler/src/util";
+
+@Component({
+  selector: 'zapatillas',
+  templateUrl: './zapatillas.component.html'
+})
+
+export class ZapatillasComponent {
+  public  titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
+  public zapatillas: Array<Zapatilla>;
+  public marcas: String[];
+
+  constructor() {
+    this.marcas = new Array();
+    this.zapatillas = [
+      new Zapatilla('Air Jordan', 'Nike', 'black', 119.90,true),
+      new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90,true),
+      new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90,false),
+      new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90,true)
+    ]
+  }
+
+  ngOnInit(){
+    console.log(this.zapatillas);
+
+    this.getMarcas();
+  }
+
+  //El método get
+  getMarcas(){
+    this.zapatillas.forEach((zapatilla, index) => {
+      if(this.marcas.indexOf(zapatilla.marca) < 0) { //En el caso de que no encuentre dentro del array marca la marca de zapatilla, indexOf(zapatilla.marca) será -1, solo en ese caso mete la marca en el array y así no se repite
+        this.marcas.push(zapatilla.marca);
+      }})
+  }
+}
+```
+Ahora con un ngFor hacemos que nos muestre todas las marcas por pantalla
+
+**zapatillas.component.html**
+```html
+import { Component } from "@angular/core";
+import { Zapatilla } from "../models/zapatilla";
+import {newArray} from "@angular/compiler/src/util";
+
+@Component({
+  selector: 'zapatillas',
+  templateUrl: './zapatillas.component.html'
+})
+
+export class ZapatillasComponent {
+  public  titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
+  public zapatillas: Array<Zapatilla>;
+  public marcas: String[];
+
+  constructor() {
+    this.marcas = new Array();
+    this.zapatillas = [
+      new Zapatilla('Ochenteras', 'Rebook', 'red and white', 59.95,false),
+      new Zapatilla('Air Jordan', 'Nike', 'black', 119.90,true),
+      new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90,true),
+      new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90,false),
+      new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90,true)
+    ]
+  }
+
+  ngOnInit(){
+    console.log(this.zapatillas);
+
+    this.getMarcas();
+  }
+
+  //El método getMarcas mete las marcas sin repetir en el array marcas.
+  getMarcas(){
+    this.zapatillas.forEach((zapatilla, index) => {
+      if(this.marcas.indexOf(zapatilla.marca) < 0) { //En el caso de que no encuentre dentro del array marca la marca de zapatilla, indexOf(zapatilla.marca) será -1, solo en ese caso mete la marca en el array y así no se repite
+        this.marcas.push(zapatilla.marca);
+      }})
+  }
+}
+```
+finalmente usando de nuevo las directivas [ngFor] y [ngStyle] hacemos que tache las zapatillas que no tienen stock
+
+```html
+<h2>{{ titulo }}</h2>
+<p>Las zapatillas tienen que ir a juego con tu personalidad</p>
+
+<div>
+  Tenemos las marcas más top
+  <ul>
+    <li *ngFor="let marca of marcas; let indice = index">{{indice + ' ' + marca}}</li> <!-- con let indice = index puedo sacar los indices-->
+  </ul>
+</div>
+
+<ul>
+  <!-- Hacemos un ternario para determinar el color del texto: -->
+  <li *ngFor="let deportiva of zapatillas">
+    <span [ngStyle]="{
+    'text-decoration': !deportiva.stock ? 'line-through' : 'none'
+    }">
+      {{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€
+    </span>
+
+
+    <span *ngIf="deportiva.precio <= 80"
+          [style.background]="deportiva.precio < 80 ? '#0acc37' : 'transparent'"
+          [style.color]="deportiva.precio < 80 ? 'white' : 'black'">
+      <strong>¡OFERTA!</strong></span>
+
+    <span *ngIf="deportiva.stock == false"
+          [style.background]="deportiva.stock == false ? 'red' : 'transparent'">
+      <strong>Agotado</strong></span>
+  </li>
+
+  <!-- Otra forma de hacerlo con [ngStyle]:
+  <li *ngFor="let deportiva of zapatillas">{{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€
+    <span *ngIf="deportiva.precio <= 80"  [ngStyle]="{'color':'#0acc37'}"><strong>¡OFERTA!</strong></span>
+    <span *ngIf="deportiva.stock == false" [ngStyle]="{'color':'red'}"><strong>Agotado</strong></span>
+  </li>
+  */-->
+</ul>
+```
+
+### 7.3 Directiva Condicional ngSwitch()
+
+Creamos una propiedad color a la que le damos un valor determinado en **zapatillas.component.ts**
+```ts
+import { Component } from "@angular/core";
+import { Zapatilla } from "../models/zapatilla";
+import {newArray} from "@angular/compiler/src/util";
+
+@Component({
+  selector: 'zapatillas',
+  templateUrl: './zapatillas.component.html'
+})
+
+export class ZapatillasComponent {
+  public  titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
+  public zapatillas: Array<Zapatilla>;
+  public marcas: String[];
+  public color: string;
+
+  constructor() {
+    this.color = 'blue';
+    this.marcas = new Array();
+    this.zapatillas = [
+      new Zapatilla('Ochenteras', 'Rebook', 'red and white', 59.95,false),
+      new Zapatilla('Air Jordan', 'Nike', 'black', 119.90,true),
+      new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90,true),
+      new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90,false),
+      new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90,true)
+    ]
+  }
+
+  ngOnInit(){
+    console.log(this.zapatillas);
+
+    this.getMarcas();
+  }
+
+  //El método getMarcas mete las marcas sin repetir en el array marcas.
+  getMarcas(){
+    this.zapatillas.forEach((zapatilla, index) => {
+      if(this.marcas.indexOf(zapatilla.marca) < 0) { //En el caso de que no encuentre dentro del array marca la marca de zapatilla, indexOf(zapatilla.marca) será -1, solo en ese caso mete la marca en el array y así no se repite
+        this.marcas.push(zapatilla.marca);
+      }})
+  }
+}
+```
+
+En **zapatillas.component.html** usamos el condicional switch para que se apliquen una serie de propiedades según el color
+```html
+<h2>{{ titulo }}</h2>
+<p>Las zapatillas tienen que ir a juego con tu personalidad</p>
+
+<div>
+  Tenemos las marcas más top
+  <ul>
+    <li *ngFor="let marca of marcas; let indice = index">{{indice + ' ' + marca}}</li> <!-- con let indice = index puedo sacar los indices-->
+  </ul>
+</div>
+
+<ul>
+  <!-- Hacemos un ternario para determinar el color del texto: -->
+  <li *ngFor="let deportiva of zapatillas">
+    <span [ngStyle]="{
+    'text-decoration': !deportiva.stock ? 'line-through' : 'none'
+    }">
+      {{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€
+    </span>
+
+
+    <span *ngIf="deportiva.precio <= 80"
+          [style.background]="deportiva.precio < 80 ? '#0acc37' : 'transparent'"
+          [style.color]="deportiva.precio < 80 ? 'white' : 'black'">
+      <strong>¡OFERTA!</strong></span>
+
+    <span *ngIf="deportiva.stock == false"
+          [style.background]="deportiva.stock == false ? 'red' : 'transparent'">
+      <strong>Agotado</strong></span>
+  </li>
+
+  <!-- Otra forma de hacerlo con [ngStyle]:
+  <li *ngFor="let deportiva of zapatillas">{{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€
+    <span *ngIf="deportiva.precio <= 80"  [ngStyle]="{'color':'#0acc37'}"><strong>¡OFERTA!</strong></span>
+    <span *ngIf="deportiva.stock == false" [ngStyle]="{'color':'red'}"><strong>Agotado</strong></span>
+  </li>
+  */-->
+</ul>
+
+<p>El color de la mayoría de nuestras zapatillas es:</p>
+<ul [ngSwitch]="color">
+  <li *ngSwitchCase="'yellow'">
+    El color predominante es el <span [ngStyle]="{'background-color':color}">amarillo</span>.
+  </li>
+  <li *ngSwitchCase="'white'">
+    El color predominante es el <span [ngStyle]="{'background-color':color}">blanco</span>.
+  </li>
+  <li *ngSwitchCase="'red'">
+    El color predominante es el <span [ngStyle]="{'background-color':color}">rojo</span>.
+  </li>
+  <li *ngSwitchCase="'blue'">
+    El color predominante es el <span [ngStyle]="{'background-color':color}">azul</span>.
+  </li>
+</ul>
+```
+## 8. Enlace de datos - Data Binding en Angular<a name="id8"></a>
