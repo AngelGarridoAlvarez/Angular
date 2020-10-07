@@ -1,7 +1,5 @@
 <h2>{{ titulo }}</h2>
 <p>Las zapatillas tienen que ir a juego con tu personalidad</p>
 <ul>
-  <li>New Balance Steve Jobs</li>
-  <li>Nike Air 1995</li>
-  <li>Zapatillas del Carrefour</li>
+  <li *ngFor="let deportiva of zapatillas">{{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€</li>
 </ul>

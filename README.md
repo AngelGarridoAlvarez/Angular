@@ -1,6 +1,12 @@
 # Angular
 
-## 1. Principales comandos de Angular
+## INDICE
+
+[1. Principaes comandos de Angular](#id1)
+[1. Principaes comandos de Angular](#id2)
+[1. Principaes comandos de Angular](#id3)
+
+## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
 
 ### 1.1. Instalar Angular
@@ -15,7 +21,7 @@ cd my-first-project
 ng serve
 ```
 
-## 2. Estructura de archivos Angular
+## 2. Estructura de archivos Angular<a name="id2"></a>
 
 * package.json - archivo principal de configuración del projecto
 * angular.json - archivod e configuración de proyecto donde podemos cargar liberías y assets externos
@@ -24,7 +30,7 @@ ng serve
 * carpeta src: es la que modificamos nosotros
     * src/app: donde vamos a crear los componentes.
 
-## 3. Elementos que conforman una APP de Angular:
+## 3. Elementos que conforman una APP de Angular:<a name="id3"></a>
 * Componentes: 
     * elemento que cómpone la página SPA de Ángular
     * es una especie de controlador de la APP
@@ -183,7 +189,7 @@ ng g component my-new-component
 * Definir una carpeta de "components" donde tengamos todos los componentes.
 * Definir una carpeta de "components" con las clases y una de views donde tuvieramos sus plantillas.
 
-## 5. Hooks:
+## 5. Hooks - Eventos durante el ciclo de vida del componente
 
 * Son eventos del ciclo de vida del componente
 * Son eventos que se ejecuntan en un momento dado del ciclo de vida del componente
@@ -380,4 +386,164 @@ Ahora cada vez que pulsemos sobre ocultar videojuegos se ejecutará ngOnDestroy(
 
 ## 6. Clases y Modelos
 
+### 6.1. Modelo de datos
+* Es una clase con una serie de propiedades que representan a un entidad
+* Ejemplo: entidad Zapatilla, entidad curso, entidad videogame
 
+Creamos la carpeta **models** dentro de src/app para trabajar con los modelos.
+Creamos el archivo **src/app/models/configuracion.ts**
+Este archivo se puede llamr como quiera y puede ir en cualquier parte del directorio de app
+
+**src/app/models/configuracion.ts**
+```ts
+//Creamos una variable con formato json que podamos exportar a otros archivos de mi applicación Angular
+
+export var Configuracion = {
+  color: "red",
+  fondo: "#eee",
+  titulo: "APP con Angular",
+  descripcion: "Learning Angular together"
+}
+```
+
+* En app.component.ts importamos Configuración.
+* Dentro de la clase AppComponent incorporamos las propiedades que nos interesen de configuracion.ts:
+* Ahora podemos llamar a estas propiedades desde su vista app.component.html
+**src/app/app.component.ts**
+```ts
+import { Component } from '@angular/core';
+import { Configuracion } from "./models/configuracion";
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent {
+  public title = 'learningAngular';
+  public descripcion: string;
+  public config;
+  public mostrarVideojuegos: boolean = true;
+
+  constructor() {
+    this.title = Configuracion.titulo;
+    this.descripcion = Configuracion.descripcion;
+    this.config = Configuracion
+  }
+
+  ocultarVideojuegos(valor){
+    this.mostrarVideojuegos = valor;
+  }
+}
+```
+
+En App component.html: 
+* incorporamos la directiva ngStyle para dar estilos
+* Al haber importado configuracion.ts y haber incorporado sus propiedades a la clase app.component ahora puedo instanciar las propiedades directamente desde la vista de app.component
+
+**src/app/app.component.html**
+```html
+<div [ngStyle]="{
+                'background': config.fondo,
+                'padding': '20px',
+                'border': '5px solid black',
+                'border-color': config.color
+                }">
+  <h1>
+    Bienvenido al {{ title }}!
+  </h1>
+
+  <p>{{ descripcion }}</p>
+  <button (click)="ocultarVideojuegos(false)" *ngIf="mostrarVideojuegos">Ocultar Videojuegos</button>
+  <button (click)="ocultarVideojuegos(true)" *ngIf="!mostrarVideojuegos">Mostrar Videojuegos</button>
+
+  <videogame *ngIf="mostrarVideojuegos"></videogame>
+  <zapatillas></zapatillas>
+  <app-cursos></app-cursos>
+
+
+</div>
+```
+
+### 6.2 Creando el modelo de datos Zapatilla
+
+* Este modelo nos servirá como "molde" para crear nuevos objetos
+* creamos zapatillas.ts en la carpeta models
+
+**src/app/models/zapatilla.ts**
+```ts
+export class Zapatilla{
+
+  //Con TypeScript me puedo ahorrar el siguiente código como se muestra a continuación:
+  /*
+  //Propiedades:
+  public nombre: string;
+  public marca: string;
+  public color: string;
+  public precio: number;
+  public stock: boolean;
+
+  constructor(nombre, marca, color, precio, stock) {
+    this.nombre = nombre;
+    this.marca = marca;
+    this.color = color;
+    this.precio = precio;
+    this.stock = stock;
+  }
+   */
+
+  constructor(
+    public nombre: string,
+  public marca: string,
+  public color: string,
+  public precio: number,
+  public stock: boolean
+  ){}
+
+}
+```
+
+A continuación importo la clase Zapatilla en el componente Zapatillas que creamos con anterioridad
+Y creo un constructor con un Array de objetos tipo Zapatilla
+
+**src/app/zapatillas/zapatillas.component.ts**
+```ts
+import { Component } from "@angular/core";
+import { Zapatilla} from "../models/zapatilla";
+
+@Component({
+  selector: 'zapatillas',
+  templateUrl: './zapatillas.component.html'
+})
+
+export class ZapatillasComponent {
+  public  titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
+  public zapatillas: Array<Zapatilla>;
+
+  constructor() {
+    this.zapatillas = [
+      new Zapatilla('Air Jordan', 'Nike', 'black', 119.90,true),
+      new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90,true),
+      new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90,false),
+      new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90,true)
+    ]
+  }
+
+  ngOnInit(){ //Gracias a este hook veremos por consola el array zapatilla al inicio del ciclo de vida del componente zapatillas.component 
+    console.log(this.zapatillas)
+  }
+}
+```
+
+En la vista de zapatillas vamos a mostrar el array de zapatillas que hemos creado:
+
+**src/app/zapatillas/zapatillas.component.html**
+```html
+<h2>{{ titulo }}</h2>
+<p>Las zapatillas tienen que ir a juego con tu personalidad</p>
+<ul>
+  <li *ngFor="let deportiva of zapatillas">{{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€</li>
+</ul>
+```
+
+## Directivas
