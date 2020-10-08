@@ -928,7 +928,7 @@ zapatillas.component.html
     </li>
   </ul>
 </div>```
-
+```
 zapatillas.component.ts
 ```html
     borrarMarca(indice){
