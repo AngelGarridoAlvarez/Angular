@@ -1,0 +1,12 @@
+.altoPrecio{
+  color: orange !important;
+  font-size: 18px !important;
+}
+
+.fondoRojo{
+  background: #f57979;
+}
+
+.subrayado{
+  text-decoration: underline;
+}

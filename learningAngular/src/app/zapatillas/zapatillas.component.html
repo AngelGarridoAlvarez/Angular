@@ -27,13 +27,24 @@
     <span [ngStyle]="{
     'text-decoration': !deportiva.stock ? 'line-through' : 'none'
     }">
-      {{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}} cuesta {{deportiva.precio}}€
+      {{deportiva.nombre}} de color {{deportiva.color}} y de marca {{deportiva.marca}}
+      <strong
+        [class.altoPrecio] ="deportiva.precio >= 80"
+        [ngClass] ="{
+        'fondoRojo': deportiva.precio > 100,
+        'subrayado': deportiva.marca == 'Nike'
+        }"
+      >
+        cuesta {{deportiva.precio}}€
+      </strong>
     </span>
 
 
     <span *ngIf="deportiva.precio <= 80"
           [style.background]="deportiva.precio < 80 ? '#0acc37' : 'transparent'"
-          [style.color]="deportiva.precio < 80 ? 'white' : 'black'">
+          [style.color]="deportiva.precio < 80 ? 'white' : 'black'"
+    >
+
       <strong>¡OFERTA!</strong></span>
 
     <span *ngIf="deportiva.stock == false"
