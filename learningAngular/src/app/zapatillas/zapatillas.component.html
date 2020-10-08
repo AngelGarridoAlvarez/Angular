@@ -1,9 +1,9 @@
 <h2>{{ titulo }}</h2>
 <p>Las zapatillas tienen que ir a juego con tu personalidad</p>
 
-<p>Añadir marca</p>
+<p><strong>Añadir marca </strong> - (presiona enter para capturar el evento keyup.enter)</p>
 <p>
-  <input type="text" [(ngModel)]="miMarca" />
+  <input type="text" [(ngModel)]="miMarca" (blur)="onBlur()" (keyup.enter)="mostrarPalabra()"/>
   <button (click)="getMarca()">Mostrar Marca</button>
   <button (click)="addMarca()">Añadir Marca</button>
 
@@ -14,7 +14,10 @@
 <div>
   Tenemos las marcas más top
   <ul>
-    <li *ngFor="let marca of marcas; let indice = index">{{indice + ' ' + marca}}</li> <!-- con let indice = index puedo sacar los indices-->
+    <li *ngFor="let marca of marcas; let indice = index">
+      {{indice + ' ' + marca}} <!-- con let indice = index puedo sacar los indices-->
+    <button (click)="borrarMarca(indice)">Borrar Marca</button>
+    </li>
   </ul>
 </div>
 

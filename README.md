@@ -915,4 +915,47 @@ export class ZapatillasComponent {
 
 ## 9. Eventos en Angular<a name="id9"></a>
 ### 9.1 Evento Click
+* Hacemos un botón para elminar una marca del listado de marcas dado el índice de esta
+
+zapatillas.component.html
+```html
+<div>
+  Tenemos las marcas más top
+  <ul>
+    <li *ngFor="let marca of marcas; let indice = index">
+      {{indice + ' ' + marca}} <!-- con let indice = index puedo sacar los indices-->
+    <button (click)="borrarMarca(indice)">Borrar Marca</button>
+    </li>
+  </ul>
+</div>```
+
+zapatillas.component.ts
+```html
+    borrarMarca(indice){
+      //delete this.marcas[indice]
+      this.marcas.splice(indice,1)
+    }
+```
+
 ### 9.2. Eventos Blur y Keyup
+
+Añadimos los eventos blur y keyup:
+**blur**: detecta cuando dejas de seleccionar algo
+**keyup**: detecta cuando presionas una tecla
+
+```html
+<p>Añadir marca (Presiona Enter para capturar el evento (keyup.enter)</p>
+<p>
+  <input type="text" [(ngModel)]="miMarca" (blur)="onBlur()" (keyup.enter)="mostrarPalabra()"/>
+  <button (click)="getMarca()">Mostrar Marca</button>
+  <button (click)="addMarca()">Añadir Marca</button>```
+
+```html
+ onBlur(){
+    alert('has sacado el ratón del input y lo hemos detectado con el evento (blur)')
+  }
+
+  mostrarPalabra(){
+    alert(`Como has presionado Enter, yo te muestro "${this.miMarca}", presiona ESC para no entrar en un bulce infinito`)
+  }
+```

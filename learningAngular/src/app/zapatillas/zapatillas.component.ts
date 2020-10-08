@@ -49,4 +49,17 @@ export class ZapatillasComponent {
     this.marcas.push(this.miMarca)
   }
 
+  borrarMarca(indice){
+    //delete this.marcas[indice]
+    this.marcas.splice(indice,1)
+  }
+
+  onBlur(){
+    alert('has sacado el ratón del input y lo hemos detectado con el evento (blur)')
+  }
+
+  mostrarPalabra(){
+    alert(`Como has presionado Enter, yo te muestro "${this.miMarca}", presiona ESC para no entrar en un bulce infinito`)
+  }
+
 }
