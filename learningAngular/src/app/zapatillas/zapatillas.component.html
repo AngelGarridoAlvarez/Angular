@@ -1,6 +1,16 @@
 <h2>{{ titulo }}</h2>
 <p>Las zapatillas tienen que ir a juego con tu personalidad</p>
 
+<p>Añadir marca</p>
+<p>
+  <input type="text" [(ngModel)]="miMarca" />
+  <button (click)="getMarca()">Mostrar Marca</button>
+  <button (click)="addMarca()">Añadir Marca</button>
+
+
+</p>
+<p>{{miMarca}}</p>
+
 <div>
   Tenemos las marcas más top
   <ul>
@@ -37,6 +47,7 @@
 </ul>
 
 <p>El color de la mayoría de nuestras zapatillas es:</p>
+<input [(ngModel)]="color"/>
 <ul [ngSwitch]="color">
   <li *ngSwitchCase="'yellow'">
     El color predominante es el <span [ngStyle]="{'background-color':color}">amarillo</span>.
@@ -48,6 +59,27 @@
     El color predominante es el <span [ngStyle]="{'background-color':color}">rojo</span>.
   </li>
   <li *ngSwitchCase="'blue'">
-    El color predominante es el <span [ngStyle]="{'background-color':color}">azul</span>.
+    El color predominante es el <span [ngStyle]="{'background-color':color, 'color':'white'}">azul</span>.
+  </li>
+  <li *ngSwitchCase="'orange'">
+    El color predominante es el <span [ngStyle]="{'background-color':color}">naranja</span>.
+  </li>
+  <li *ngSwitchCase="'pink'">
+    El color predominante es el <span [ngStyle]="{'background-color':color}">rosa</span>.
+  </li>
+  <li *ngSwitchCase="'purple'">
+    El color predominante es el <span [ngStyle]="{'background-color':color, 'color':'white'}">púrpura</span>.
+  </li>
+  <li *ngSwitchCase="'brown'">
+    El color predominante es el <span [ngStyle]="{'background-color':color, 'color':'white'}">marrón</span>.
+  </li>
+  <li *ngSwitchCase="'black'">
+    El color predominante es el <span [ngStyle]="{'background-color':color, 'color':'white'}">negro</span>.
+  </li>
+  <li *ngSwitchCase="'grey'">
+    El color predominante es el <span [ngStyle]="{'background-color':color, 'color':'white'}">gris</span>.
+  </li>
+  <li *ngSwitchCase="'green'">
+    El color predominante es el <span [ngStyle]="{'background-color':color, 'color':'white'}">verde</span>.
   </li>
 </ul>

@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import {VideogameComponent} from "./videogame/videogame.component";
 import {ZapatillasComponent } from "./zapatillas/zapatillas.component";
 import { CursosComponent } from './cursos/cursos.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { CursosComponent } from './cursos/cursos.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -16,6 +16,8 @@ El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender
 7. [Directivas estructurales](#id7)
     * Condicional *ngIf - Estilo [ngStyle] - Bucle *ngFor - *ngSwitch
 8. [Enlace de datos - Data Binding en Angular](#id8)
+9. [Eventos en Angular](#id9)
+    * Click, Blur, Keyup
 
 ## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
@@ -832,3 +834,85 @@ En **zapatillas.component.html** usamos el condicional switch para que se apliqu
 </ul>
 ```
 ## 8. Enlace de datos - Data Binding en Angular<a name="id8"></a>
+
+## 8.1. Two-way Data Binding - Evento Click
+
+**[(ngModel)]**
+* Directiva para formularios que permite modificar de manera instantánea propiedades de nuestro modelo de datos (la clase de nuestro componente).
+* Para poder usarlo, en **app.modules.ts** hay que añadir **import {FormsModule} from "@angular/forms";** así como añadir FormsModule dentro del apartado imoprts:[] del mismo archivo.
+* Vamos a hacer un campo que nos permita añadir un elemento al listado de marcas que hemos creado anteriormente
+
+Creamos la propiedad miMarca dentro de la clase ZapatillasComponent
+```ts
+//...
+export class ZapatillasComponent {
+  public  titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
+  public zapatillas: Array<Zapatilla>;
+  public marcas: String[];
+  public color: string;
+  public miMarca: string;
+}
+//...
+```
+**Creamos:** 
+* un input en donde escribir las marcas
+* un botón para que me haga un alert con su correspondiente método asociado
+* un botón para que añada las marcas al listado con su método asociado:
+
+**zapatillas.component.html**
+```html
+<p>Añadir marca</p>
+<p>
+  <input type="text" [(ngModel)]="miMarca" />
+  <button (click)="getMarca()">Mostrar Marca</button>
+
+</p>
+<p>{{miMarca}}</p>
+```
+**zapatillas.component.ts**
+```ts
+//...
+export class ZapatillasComponent {
+  public titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
+  public zapatillas: Array<Zapatilla>;
+  public marcas: String[];
+  public color: string;
+  public miMarca: string; // Añadimos la propiedad miMarca
+
+  constructor() {
+    this.miMarca = 'Fila'; //Le doy un valor predefinido a miMarca
+    this.color = 'blue';
+    this.marcas = new Array();
+    this.zapatillas = [
+      new Zapatilla('Ochenteras', 'Rebook', 'red and white', 59.95, false),
+      new Zapatilla('Air Jordan', 'Nike', 'black', 119.90, true),
+      new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90, true),
+      new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90, false),
+      new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90, true)
+    ]
+  }
+//...
+
+// Creo el método alert
+  getMarca(){
+    alert(this.miMarca)
+  }
+// Creo el método añadir marca
+  addMarca(){
+    this.marcas.push(this.miMarca)
+  }
+
+}
+```
+
+## 8.2. Ejemplo binding bi-direccional
+
+* Añadimos un input para modificar el color con [(ngModel)]:
+
+```html
+<input [(ngModel)]="color"/>
+```
+
+## 9. Eventos en Angular<a name="id9"></a>
+### 9.1 Evento Click
+### 9.2. Eventos Blur y Keyup
