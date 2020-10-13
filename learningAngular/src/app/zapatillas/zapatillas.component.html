@@ -97,3 +97,6 @@
     El color predominante es el <span [ngStyle]="{'background-color':color, 'color':'white'}">verde</span>.
   </li>
 </ul>
+<!-- <app-go-back></app-go-back>-->
+<!-- el componente app-go-back me recarga la página entera y no tiene sentido, por eso no lo vamos a usar, en su lugar usaremos una ruta del routing que llamaremos Go Home-->
+<p><a [routerLink]="['/home/']">Go Home</a></p>

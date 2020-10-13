@@ -7,7 +7,7 @@
   <h1>
     Bienvenido al {{ title }}!
   </h1>
-
+<!-- Creo el componente2 para incluir este código y poder seguir viendo como funciona lo anterior
   <p>{{ descripcion }}</p>
   <button (click)="ocultarVideojuegos(false)" *ngIf="mostrarVideojuegos">Ocultar Videojuegos</button>
   <button (click)="ocultarVideojuegos(true)" *ngIf="!mostrarVideojuegos">Mostrar Videojuegos</button>
@@ -15,6 +15,20 @@
   <videogame *ngIf="mostrarVideojuegos"></videogame>
   <zapatillas></zapatillas>
   <app-cursos></app-cursos>
+-->
+  <nav>
+    <a [routerLink]="['/home']" [routerLinkActive]="['claseActive']">Home</a>
+    &nbsp;<!-- me hace un espacio de separación entre los elementos-->
+    <a [routerLink]="['/videogame/']" [routerLinkActive]="['claseActive']">Videgame</a>
+    &nbsp;
+    <a [routerLink]="['/zapatillas/']" [routerLinkActive]="['claseActive']">Zapatillas</a>
+    &nbsp;
+    <a [routerLink]="['/cursos/']" [routerLinkActive]="['claseActive']">Cursos</a>
+    &nbsp;
+    <a [routerLink]="['/home2/']" [routerLinkActive]="['claseActive']">home2(deprecated)</a>
+  </nav>
+
+  <hr>
 
   <router-outlet></router-outlet>
 

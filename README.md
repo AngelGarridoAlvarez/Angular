@@ -18,6 +18,11 @@ El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender
 8. [Enlace de datos - Data Binding en Angular](#id8)
 9. [Eventos en Angular](#id9)
     * Click, Blur, Keyup
+10. [Rutas / Routing en Angular](#id10)
+    * Crear menú de navegación instantaneo
+    * routerLinkActive - Resaltar la página actual del menú
+    * Pasar parámetros por la URL
+    * Redirecciones con Router Navigate
 
 ## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
@@ -958,4 +963,232 @@ Añadimos los eventos blur y keyup:
   mostrarPalabra(){
     alert(`Como has presionado Enter, yo te muestro "${this.miMarca}", presiona ESC para no entrar en un bulce infinito`)
   }
+```
+## 10. Rutas / Routing en Angular <a name="id10"></a>
+
+**Pasos a seguir**
+
+1 - Asegurarnos de que en index.html tenemos 
+```html
+<base href="/">
+```
+2 - Crear app.routing.ts en src/app/
+
+**src/app/app.routing.ts**
+```ts
+// Importamos los módulos del router de Anglular
+
+import { ModuleWithProviders} from '@angular/core';
+import { Routes, RouterModule} from "@angular/router";
+
+// Importar Componentes
+
+import { HomeComponent} from "./home/home.component";
+import {ZapatillasComponent} from "./zapatillas/zapatillas.component";
+import {VideogameComponent} from "./videogame/videogame.component";
+import {CursosComponent} from "./cursos/cursos.component";
+import {Home2Component} from "./home2/home2.component";
+
+// Array de rutas
+
+const appRoutes: Routes = [ //Creo la constante appRoutes que tiene que tener formato tipo Routes, en la que vamos a meter objetos json
+
+  {path: '', component: HomeComponent},// Este es el componente que se me va a marcar por defecto
+  {path: 'zapatillas', component: ZapatillasComponent},
+  {path: 'videogame', component: VideogameComponent},
+  {path: 'cursos', component: CursosComponent},
+  {path: 'home2', component: Home2Component},
+  {path: '**', component: HomeComponent},//Esta es la ruta que se me cargará si pongo una ruta que no existe. Tiene que ir en última posición.
+];
+
+// Exportar el modulo del router
+
+export  const appRoutingProviders: any[]=[]; //Exportamos el servicio
+export const routing: ModuleWithProviders<any> = RouterModule.forRoot(appRoutes) //Exportamos el módulo
+
+```
+3 - importamos el modulo y el servicio en **app.module.ts**
+```ts
+import { routing, appRoutingProviders} from "./app.routing";
+
+//y cargamos dentro de NgModule (en imports y en providers) estas dos importaciones:
+
+@NgModule({
+  declarations: [
+//...
+  ],
+  imports: [
+   //...
+    routing
+  ],
+  providers: [
+    appRoutingProviders
+  ],
+//...
+})
+//...
+```
+4 - Utilizar **ROUTER OUTLET** en **app.component.html**
+```html
+  <router-outlet></router-outlet>
+```
+* Dentro de la etiqueta <router-otulet> se va a cargar el componente que le pasemos por la ruta.
+* He comentado el código anterior y lo he puesto en la ruta home2 para que se pueda ver lo que estaba hecho hasta este momento
+* ahora si ponemos http://localhost:4200/zapatillas nos lleva a ese componente
+
+### 10.2 Crear menú de navegación instantaneo
+
+De esta manera hacemos un menú de navegación instantaneo que no recarga la página
+
+**app.component.html**
+```html
+  <nav>
+    <a [routerLink]="['/']">Home</a>
+    &nbsp;<!-- me hace un espacio de separación entre los elementos-->
+    <a [routerLink]="['/videogame/']">Videgame</a>
+    &nbsp;
+    <a [routerLink]="['/zapatillas/']">Zapatillas</a>
+    &nbsp;
+    <a [routerLink]="['/cursos/']">Cursos</a>
+    &nbsp;
+    <a [routerLink]="['/home2/']">home2(deprecated)</a>
+  </nav>
+```
+
+### 10.3 routerLinkActive - Resaltar la página actual del menú
+
+Con la directiva routerLinkActive podemos incorporar una clase que elijamos al menú seleccionado
+```html
+  <nav>
+    <a [routerLink]="['/home']" [routerLinkActive]="['claseActive']">Home</a>
+    &nbsp;<!-- me hace un espacio de separación entre los elementos-->
+    <a [routerLink]="['/videogame/']" [routerLinkActive]="['claseActive']">Videgame</a>
+    &nbsp;
+    <a [routerLink]="['/zapatillas/' [routerLinkActive]="['claseActive']"]">Zapatillas</a>
+    &nbsp;
+    <a [routerLink]="['/cursos/']" [routerLinkActive]="['claseActive']">Cursos</a>
+    &nbsp;
+    <a [routerLink]="['/home2/']" [routerLinkActive]="['claseActive']">home2(deprecated)</a>
+  </nav>
+```
+
+Creamos nuestra clase 'claseActive' en **src/assets/styles.css**
+```css
+.claseActive{
+  border: 3px solid yellow;
+}
+```
+
+### 10.4 Pasar parámetros por la URL
+
+Si queremos pasar el parámetro nombre a través de la ruta "cursos/" tenemos que modificar su ruta:
+**app.routing.ts**
+```ts
+const appRoutes: Routes = [ //Creo la constante appRoutes que tiene que tener formato tipo Routes, en la que vamos a meter objetos json
+//...
+  {path: 'cursos/ :nombre', component: CursosComponent},
+//...
+];
+```
+
+* Ahora creamos una función que use el parámetro nombre
+* Previamente para poder usar el parámetro tengo que cargar varios componentes del router en el componente cursos y cargarlos también en su contructor:
+
+**cursos.component.ts**
+```ts
+//...
+import { Router, ActivatedRoute, Params} from "@angular/router";
+
+//..
+
+export class CursosComponent implements OnInit {
+
+  constructor( //Incluyo estas propiedades para poder pasar parametros
+    private _route: ActivatedRoute,
+    private _router: Router
+  ) { };
+```
+Vamos a preparar app.routing.ts , app.component.ts y app.component.html para usar dos parámetros:
+
+Entrodcimos las propiedades/parametros en el OnInit en **cursos.component.ts**
+```ts
+port class CursosComponent implements OnInit {
+  public nombre: string; //Creo la propiedades nombre y followers
+  public followers: number;
+
+  constructor( //Incluyo estas propiedades para poder pasar parametros
+    private _route: ActivatedRoute,
+    private _router: Router
+  ) { }
+  //Hago que al inicio use los parametros que le he pasado por página y me los devuelva por consola
+  ngOnInit(): void {
+    this._route.params.subscribe((params: Params)=>{
+      this.nombre = params.nombre;
+      //this.nombre = params['nombre']; otra forma de sacar el nombre en JS, como array asociativo
+      this.followers = +params.followers;//pongo + para que lo convierta a tipo number
+      console.log(this.nombre + " - " + this.followers + " followers")
+    })
+  }
+
+}
+
+```
+
+**cursos.component.html**
+```html
+<!--...-->
+<ul>
+  <li>JavaScript</li>
+  <li>Php, symfony, wordpress</li>
+  <li> Node JS </li>
+  <li> MongoDB</li>
+  <li> Angular </li>
+  <li> React </li>
+<!-- con la directiva *ngIf consigo que solo aparezca nombre si existe ese parámetro-->
+  <li *ngIf="nombre">Curso adicional de {{nombre}} <span *ngIf="followers"> - tiene {{followers}} followers</span></li><!-- Si paso por parametro un nombre me va a aparecer un curso adicional -->
+</ul>
+<!--...-->
+```
+
+**app.routing.ts**
+```ts
+//...
+const appRoutes: Routes = [ //Creo la constante appRoutes que tiene que tener formato tipo Routes, en la que vamos a meter objetos json
+
+  {path: '', component: HomeComponent},// Este es el componente que se me va a marcar por defecto
+  {path: 'home', component: HomeComponent},// Este es el componente que se me va a marcar por defecto
+  {path: 'zapatillas', component: ZapatillasComponent},
+  {path: 'videogame', component: VideogameComponent},
+  {path: 'cursos', component: CursosComponent},
+  {path: 'cursos/:nombre', component: CursosComponent},//Esta es la ruta de cursos, pasando un parámetro adicional
+  {path: 'cursos/:nombre/:followers', component: CursosComponent},//Esta es la ruta de cursos, pasando dos parámetros adicionales
+  {path: 'home2', component: Home2Component},
+  {path: '**', component: HomeComponent},//Esta es la ruta que se me cargará si pongo una ruta que no existe. Tiene que ir en última posición.
+];
+//...
+```
+
+Probar las siguientes url:
+* http://localhost:4200/cursos
+* http://localhost:4200/cursos/fullstack
+* http://localhost:4200/cursos/fullstack/30000
+
+### 10.5 Redirecciones con Router Navigate
+
+* Cuando programaticamente se redirige al usuario a otra página de nuestra web
+* Es diferente al link 
+
+Creo el método redirigir en **cursos.component.ts**
+```ts
+<!--...-->
+redirigir(){
+    this._router.navigate(['/zapatillas'])
+  }<!--...-->
+```
+
+Creo un botón para usar el método en **cursos.component.html**
+```html
+<!--...-->
+<button (click)="redirigir()">Llévame a Zapatillas</button>
+<!--...-->
 ```

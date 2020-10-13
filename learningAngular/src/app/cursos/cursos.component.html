@@ -7,4 +7,12 @@
   <li> MongoDB</li>
   <li> Angular </li>
   <li> React </li>
+  <!-- con la directiva *ngIf consigo que solo aparezca nombre si existe ese parámetro-->
+  <li *ngIf="nombre">Curso adicional de {{nombre}} <span *ngIf="followers"> - tiene {{followers}} followers</span></li><!-- Si paso por parametro un nombre me va a aparecer un curso adicional -->
 </ul>
+
+<button (click)="redirigir()">Llévame a Zapatillas</button>
+
+<!-- <app-go-back></app-go-back>-->
+<!-- el componente app-go-back me recarga la página entera y no tiene sentido, por eso no lo vamos a usar, en su lugar usaremos una ruta del routing que llamaremos Go Home-->
+<p><a [routerLink]="['/home/']">Go Home</a></p>

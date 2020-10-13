@@ -10,3 +10,7 @@
 .subrayado{
   text-decoration: underline;
 }
+
+.claseActive{
+  border: 3px solid yellow;
+}
