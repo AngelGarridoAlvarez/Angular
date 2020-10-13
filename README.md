@@ -23,6 +23,13 @@ El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender
     * routerLinkActive - Resaltar la página actual del menú
     * Pasar parámetros por la URL
     * Redirecciones con Router Navigate
+11. [ngTemplate - hacer else además de if](#id11)
+    * If y else en las vistas
+    * Then - If else
+12. [Servicios HTTP Y Ajax](#id12)
+    * Crear servicios
+    * Servicios y HttpClient
+    * Efecto de Carga
 
 ## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
@@ -1192,3 +1199,78 @@ Creo un botón para usar el método en **cursos.component.html**
 <button (click)="redirigir()">Llévame a Zapatillas</button>
 <!--...-->
 ```
+
+## 11 ngTemplate <a name="id11"></a>
+
+* permite hacer else además de if
+
+### 11.1 ngTemplate - If y else en las vistas
+
+Creo un sistema de identificación en home para aplicar diferentes plantillas a este componente con ngTemplate:
+
+**home.component.ts**
+* Establezco una propiedad boolean identificado la predefino como false
+* Establezco los métodos para identificarse y cerrar sesión que asociaré a dos botones diferentes en mis vistas
+```ts
+<!--...-->
+export class HomeComponent implements OnInit {
+  public identificado: boolean;
+
+  constructor() {
+    this.identificado = false;
+  }
+
+  ngOnInit(): void {
+  }
+
+  setIdentificado(){
+    this.identificado = true;
+  }
+
+  unsetIdentificado(){
+    this.identificado = false;
+  }
+
+}
+<!--...-->
+```
+
+**home.component.html**
+* Utilizo la directiva *ngIf seguida de else para que aparezcan diferentes vistas del componente
+* utilizo ng-template para crear una plantilla que se me va a cargar cuando se me cumpla la propiedad #noIdentificado que he creado en home.component.ts
+```html
+<!--...-->
+<div *ngIf="identificado; else noIdentificado"> 
+  <h3> Estás identificado en la aplicación </h3>
+  <button (click)="unsetIdentificado()">Cerrar Sesión</button>
+</div>
+<!-- -->
+<ng-template #noIdentificado>
+  <p>No estás identificadom pulsa este botón para identificarte</p>
+  <button (click)="setIdentificado()">Indentifícate</button>
+</ng-template>
+<!--...-->
+```
+
+
+### 11.2 ngTemplate - Then - If else
+
+* Then permite tener más de un template, en este caso podríamos hacer dos ngTempplate (dos plantillas) una para identificado y otra para no identificado.
+
+```html
+<div *ngIf="identificado; then siIdentificado; else noIdentificado"></div>
+<ng-template #siIdentificado>
+<h3> Estás identificado en la aplicación </h3>
+<button (click)="unsetIdentificado()">Cerrar Sesión</button>
+</ng-template>
+
+<ng-template #noIdentificado>
+  <p>No estás identificado pulsa este botón para identificarte</p>
+  <button (click)="setIdentificado()">Indentifícate</button>
+</ng-template>
+```
+
+## 12. Servicios HTTP Y Ajax<a name="id11"></a>
+### 12.1 Crear servicios
+### 12.2 Servicios y HttpClient
+### 12.3 Efecto de Carga

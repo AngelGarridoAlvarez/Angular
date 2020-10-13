@@ -10,3 +10,27 @@
 
 </ol>
 -->
+
+<!-- Si está identificado me aparece este div - en otro caso (else) - me aparece el la plantilla no identificado #-->
+<!-- <div *ngIf="identificado; else noIdentificado">
+  <h3> Estás identificado en la aplicación </h3>
+  <button (click)="unsetIdentificado()">Cerrar Sesión</button>
+</div>
+
+<ng-template #noIdentificado>
+  <p>No estás identificado pulsa este botón para identificarte</p>
+  <button (click)="setIdentificado()">Indentifícate</button>
+</ng-template>
+-->
+<!-- podemos usar más de una plantillas usando el then en el ngTemplate, comento el texto anterior y hacemos lo mismo con dos plantillas (#identificado y #noIdentificado) en lugar de una vista predefinida y una sola plantillas como está hecho en el código anterior-->
+
+<div *ngIf="identificado; then siIdentificado; else noIdentificado"></div>
+<ng-template #siIdentificado>
+<h3> Estás identificado en la aplicación </h3>
+<button (click)="unsetIdentificado()">Cerrar Sesión</button>
+</ng-template>
+
+<ng-template #noIdentificado>
+  <p>No estás identificado pulsa este botón para identificarte</p>
+  <button (click)="setIdentificado()">Indentifícate</button>
+</ng-template>

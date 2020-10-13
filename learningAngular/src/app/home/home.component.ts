@@ -6,10 +6,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  public identificado: boolean;
 
-  constructor() { }
+  constructor() {
+    this.identificado = false;
+  }
 
   ngOnInit(): void {
+  }
+
+  setIdentificado(){
+    this.identificado = true;
+  }
+
+  unsetIdentificado(){
+    this.identificado = false;
   }
 
 }
