@@ -30,6 +30,9 @@ El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender
     * Crear servicios
     * Servicios y HttpClient
     * Efecto de Carga
+13. [Pipes](#id13)
+
+
 
 ## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
@@ -1274,7 +1277,7 @@ export class HomeComponent implements OnInit {
 </ng-template>
 ```
 
-## 12. Servicios HTTP Y Ajax<a name="id11"></a>
+## 12. Servicios HTTP Y Ajax<a name="id12"></a>
 
 
 ### 12.1 Crear servicios
@@ -1492,9 +1495,10 @@ Ya podemos dibujar en la vista del componente externo los datos he pedido a la A
   <h2>{{user.first_name + ' ' + user.last_name}}</h2>
 </div>
 ```
-
+#### 12.2 plus - Crear un input para elegir el id de usuario 
 Podemos crear un input y usar la directiva para formularios ngModel que nos permite modificar la clase de manera instantánea para que introduzcamos el id del usuario que nos muestra por pantalla:
-
+* Tenemos que vincular la id de usuario que nos provee nuestro servicio peticiones.services.ts con lo que metemos en el input mediante ngModel
+* Previamente tenemos que crear un método en externo.component.ts que genere las peticiones de forma correcta
 ```html
 <p>externo works!</p>
 
@@ -1588,3 +1592,24 @@ Cambio mi método cargaUsuario de externo.component.ts
 ```
 
 ### 12.3 Efecto de Carga
+
+Con la directiva *ngIf creamos un efecto de carga para cuando user no tenga datos ya que es al ser una petición asíncrona puede tardar en recibir los 
+
+**externo.component.html**
+```html
+ <div *ngIf="!user">
+   Cargando...
+ </div>
+```
+
+Para que se vea el mensaje de cargando del externo.component.html al cambiar de usuario tenemos que dejar user como false de forma predefinida, cuando se reciban los datos user será true y se dibujarán los datos
+
+**externo.component.html**
+```ts
+ cargaUsuario(){
+    this.user = false;
+```
+
+
+
+## 13. PIPES <a name="id13"></a>

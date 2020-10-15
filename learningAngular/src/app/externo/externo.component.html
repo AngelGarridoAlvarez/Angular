@@ -1,4 +1,10 @@
 <p>externo works!</p>
+<p>Introduce un número de usuario del 1 al 1</p>
+
+<!-- Creamos un efecto de carga para cuando user no tenga datos ya que es al ser una petición asíncrona puede tardar en recibir los datos-->
+<div *ngIf="!user">
+  Cargando...
+</div>
 
 <!-- Creamos un input para que nos muestre el usuario seleccionado por pantalla
 * Usamos la directiva para formularios ngModel que nos permite modificar la clase de manera instantánea para que introduzcamos el id del usuario que nos muestra por pantalla
@@ -11,3 +17,5 @@
   <img src="{{user.avatar}}" />
   <h2>{{user.first_name + ' ' + user.last_name}}</h2>
 </div>
+
+

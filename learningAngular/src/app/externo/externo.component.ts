@@ -46,6 +46,7 @@ export class ExternoComponent implements OnInit {
 
   //Creo este método para que cuándo presione la letra enter en mi input se me cargue el usuario
   cargaUsuario(){
+    this.user = false;//Ponemos esto para que se vea el mensaje de cargando del externo.component.html al cambiar de usuario.
     //this._peticionesService.getUser().subscribe(
     // añado parámetros a getUser para poder elegir el usuario que quiero que dibuje desde el input
     this._peticionesService.getUser(this.idUsuario).subscribe(
