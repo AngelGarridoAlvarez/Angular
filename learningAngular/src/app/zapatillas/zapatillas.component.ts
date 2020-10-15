@@ -1,9 +1,13 @@
 import {Component} from "@angular/core";
+//Como estamos utilizando el objeto Zapatilla, tenemos que importar su modelo de datos
 import {Zapatilla} from "../models/zapatilla";
+//Además del modelo de datos, tenemos que importar el propio objeto Zapatillas:
+import {ZapatillaService} from "../service/zapatilla.service";
 
-@Component({
-  selector: 'zapatillas',
-  templateUrl: './zapatillas.component.html'
+@Component({ //Esto es un decorador
+  selector: 'zapatillas', //Indico en que etiqueta de index.html se va a cargar el componente
+  templateUrl: './zapatillas.component.html',// Indica cual es la vista de este componente
+  providers: [ZapatillaService]//Añadimos ZapatillaService como un provider (un servicio de mi componente)
 })
 
 export class ZapatillasComponent {
@@ -13,10 +17,15 @@ export class ZapatillasComponent {
   public color: string;
   public miMarca: string;
 
-  constructor() {
+  constructor(
+    //En el constructor tengo que definir la propiedad _zapatillaService
+    // La propiedad _zapatillaService empieza con guion bajo al tratarse de un servicio
+    private _zapatillaService: ZapatillaService
+  ) {
     this.miMarca = 'Fila';
     this.color = 'blue';
     this.marcas = new Array();
+    /* Ahora este array de zapatillas me lo va ha devolver desde el servicio zapatillas.service.ts, por eso lo comento
     this.zapatillas = [
       new Zapatilla('Ochenteras', 'Rebook', 'red and white', 59.95, false),
       new Zapatilla('Air Jordan', 'Nike', 'black', 119.90, true),
@@ -24,10 +33,14 @@ export class ZapatillasComponent {
       new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90, false),
       new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90, true)
     ]
+     */
   }
 
   ngOnInit() {
     console.log(this.zapatillas);
+    //a this.zapatillas le doy el valor del método que me da el array de Zapatillas para que los métodos de este mismo archivo me lo dibujen
+    this.zapatillas = this._zapatillaService.getZapatillas();
+    alert(this._zapatillaService.getTexto())
 
     this.getMarcas();
   }

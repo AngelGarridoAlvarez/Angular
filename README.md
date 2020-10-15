@@ -94,7 +94,7 @@ import { Component } from '@angular/core'; //importamos el módulo que cargamos 
 
 @Component({ // Esto es un decorador
   selector: 'app-root', //Indico en que etiqueta de index.html se va a cargar el componente
-  templateUrl: './app.component.html',// Indica cual es la vista de este coponentes
+  templateUrl: './app.component.html',// Indica cual es la vista de este componente
   styleUrls: ['./app.component.scss']// Indica el estilo del componente
 })
 export class AppComponent { //Exportamos la clase para poder utilizarla en otros archivos
@@ -1271,6 +1271,111 @@ export class HomeComponent implements OnInit {
 ```
 
 ## 12. Servicios HTTP Y Ajax<a name="id11"></a>
+
+
 ### 12.1 Crear servicios
+**Servicios**:
+* Servicio: Provee de datos/funcionalidades a un componente
+* Clases cuyo objetivo principal es abstraer la lógica principal de la aplicación (la separa del front)
+* Clases enfocadas a tener los métodos/funcionalidades que interactúan directamente con un servicio REST/ o con un servidor externo
+* Clases con métodos que van a hacer peticiones AJAX a nuestro backend
+
+Creamos src/app/**service/zapatilla.service.ts**
+
+**service/zapatilla.service.ts**
+* Primero crear import de clase { Injectable }, esto nos evita tener que crear el objeto siempre que lo estemos invocando en lugar de hacer 'new zapatillas.service etc...'
+
+```ts
+import {Injectable} from "@angular/core";
+//Como estamos utilizando el objeto Zapatilla, tenemos que importar su modelo de datos
+import {Zapatilla} from "../models/zapatilla";
+
+
+@Injectable()
+export class ZapatillaService {
+  public zapatillas: Array<Zapatilla>;
+
+//El array de zapatillas ahora lo envío desde mi servicio, así que lo pongo aquí y lo quito del componente Zapatilla
+  constructor() {
+    this.zapatillas = [
+      new Zapatilla('Ochenteras', 'Rebook', 'red and white', 59.95, false),
+      new Zapatilla('Air Jordan', 'Nike', 'black', 119.90, true),
+      new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90, true),
+      new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90, false),
+      new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90, true)
+    ]
+  }
+
+  getTexto(){
+    return "Hola Mundo desde un servicio"
+  }
+
+  //Creo un método para que me devuelva un array de objetos tipo Zapatilla
+  getZapatillas(): Array<Zapatilla>{
+    return this.zapatillas;
+  }
+
+}
+```
+zapatilla.component.ts
+* Utilizar nuestro service dentro del componente zapatillas.component.ts
+* Importar Zapatilla.service.ts dentro de zapatillas.component.ts
+* Lo inyecto como un provider dentro del decorador del componente
+* Lo inyecto como dependencia dentro de una propiedad en el constructor
+* En el hook ngOnInit que se ejecuta al inicio del cliclo de vida del componente llamámos al método getZapatillas para que se me dibuje el array de zapatillas desde el provider.
+```ts
+import {Component} from "@angular/core";
+//Como estamos utilizando el objeto Zapatilla, tenemos que importar su modelo de datos
+import {Zapatilla} from "../models/zapatilla";
+//Además del modelo de datos, tenemos que importar el propio objeto Zapatillas:
+import {ZapatillaService} from "../service/zapatilla.service";
+
+@Component({ //Esto es un decorador
+  selector: 'zapatillas', //Indico en que etiqueta de index.html se va a cargar el componente
+  templateUrl: './zapatillas.component.html',// Indica cual es la vista de este componente
+  providers: [ZapatillaService]//Añadimos ZapatillaService como un provider (un servicio de mi componente)
+})
+
+export class ZapatillasComponent {
+  public titulo: string = "Componente Zapatillas"; //Esto no es buena práctica pero se puede hacer, mirar videogame.component para ver la buena práctica
+  public zapatillas: Array<Zapatilla>;
+  public marcas: String[];
+  public color: string;
+  public miMarca: string;
+
+  constructor(
+    //En el constructor tengo que definir la propiedad _zapatillaService
+    // La propiedad _zapatillaService empieza con guion bajo al tratarse de un servicio
+    private _zapatillaService: ZapatillaService
+  ) {
+    this.miMarca = 'Fila';
+    this.color = 'blue';
+    this.marcas = new Array();
+    /* Ahora este array de zapatillas me lo va ha devolver desde el servicio zapatillas.service.ts, por eso lo comento
+    this.zapatillas = [
+      new Zapatilla('Ochenteras', 'Rebook', 'red and white', 59.95, false),
+      new Zapatilla('Air Jordan', 'Nike', 'black', 119.90, true),
+      new Zapatilla('New Balance Steve Jobs', 'New Balance', 'pure white', 69.90, true),
+      new Zapatilla('Nike Air 1995', 'Nike', 'red', 129.90, false),
+      new Zapatilla('Zapatillas del Carrefour', 'NISU', 'generic white', 19.90, true)
+    ]
+     */
+  }
+
+  ngOnInit() {
+    console.log(this.zapatillas);
+    //a this.zapatillas le doy el valor del método que me da el array de Zapatillas para que los métodos de este mismo archivo me lo dibujen
+    this.zapatillas = this._zapatillaService.getZapatillas();
+    alert(this._zapatillaService.getTexto())
+
+    this.getMarcas();
+  }
+//...
+}
+```
+
+
+
+
 ### 12.2 Servicios y HttpClient
 ### 12.3 Efecto de Carga
