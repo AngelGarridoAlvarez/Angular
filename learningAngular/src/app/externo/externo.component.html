@@ -1,0 +1,13 @@
+<p>externo works!</p>
+
+<!-- Creamos un input para que nos muestre el usuario seleccionado por pantalla
+* Usamos la directiva para formularios ngModel que nos permite modificar la clase de manera instantánea para que introduzcamos el id del usuario que nos muestra por pantalla
+* Usamos el hook (keyup.enter) para que al presionar enter se ejecute el método cargaUsuario-->
+
+<input type="text" [(ngModel)]="idUsuario" (keyup.enter)="cargaUsuario()"/>
+<!-- modificamos la propiedad usario con two-way data binding-->
+
+<div *ngIf="user"> <!-- Uso la directiva ngIf para que solo se cargue cuando user tenga algo-->
+  <img src="{{user.avatar}}" />
+  <h2>{{user.first_name + ' ' + user.last_name}}</h2>
+</div>

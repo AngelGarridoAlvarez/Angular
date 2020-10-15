@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http"; //para poder hacer peticiones http
 import { routing, appRoutingProviders} from "./app.routing";
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,6 +12,7 @@ import { CursosComponent } from './cursos/cursos.component';
 import { HomeComponent } from './home/home.component';
 import { Home2Component} from "./home2/home2.component";
 import { GoBackComponent } from './go-back/go-back.component';
+import { ExternoComponent } from './externo/externo.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +22,15 @@ import { GoBackComponent } from './go-back/go-back.component';
     CursosComponent,
     HomeComponent,
     Home2Component,
-    GoBackComponent
+    GoBackComponent,
+    ExternoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    routing
+    routing,
+    HttpClientModule //modulo para poder hacer peticiones http
   ],
   providers: [
     appRoutingProviders

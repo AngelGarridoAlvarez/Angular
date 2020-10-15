@@ -67,6 +67,10 @@ ng serve
   
 * Decoradores y Metadatos
     * Es un patrón de diseño que va a configurar los atributos o metadatos que describen a las clases y las relaciones.
+    * Permite añadir anotaciones y metadatos o cambiar el comportamiento de clases, propiedades, métodos, parámetros y accesors
+    * Un decorador es una función que, dependiendo de que cosa queramos decorar, sus argumentos serán diferentes.
+    * Patrón de diseño de software que sirve para extender una función mediante otra función, pero sin tocar aquella original, que se está extendiendo.
+    * El decorador recibe una función como argumento (aquella que se quiere decorar) y devuelve esa función con alguna funcionalidad adicional.
 
 * Servicios
     * Clases con un objetivo claro tales como:
@@ -1378,4 +1382,209 @@ export class ZapatillasComponent {
 
 
 ### 12.2 Servicios y HttpClient
+* Hacer peticiones AJAX a un servicio externo / API REST externo
+* Se puede hacer con dos módulos:
+    * http client module
+    * http module (está en desuso)
+
+* Creamos un nuevo componente llamado "externo" para hacer las peticiones ajax
+* Desde el directorio del proyecto "ng g component externo"
+* Añadimos el nuevo componente al routing
+    * Importamos el ExternoComponent
+    * creamos un nuevo path
+    
+**src/app/app.routing.ts**
+```ts
+//...
+import {ExternoComponent} from "./externo/externo.component";
+//...
+const appRoutes: Routes = [
+//...
+  {path: 'externo', component: ExternoComponent},
+//...
+]
+//...
+```
+* Añadimos el enlace a nuestro menú en **src/app/app.component.html**
+
+* Paso principal: importar http client module en **app.module.ts** y cargarlo en imports
+ ```ts
+//...
+ import {HttpClientModule} from "@angular/common/http";
+//...
+@NgModule({
+//...
+HttpClientModule
+//...
+}) 
+```
+
+* Creamos un nuevo servicio  **app/service/peticiones.service.ts** que gestione nuestras peticiones AJAX
+* Usamos la API resreq.in para traernos información y procesarla
+```ts
+//Este servicio va ahacer peticiones AJAX a un servidor
+import {Injectable} from "@angular/core"; //Para poder inyectar nuestro servicio en otras clases
+import {HttpClient, HttpHeaders} from "@angular/common/http"; //Nos permiten hacer peticiones AJAX y  modificar sus cabeceras
+import {Observable} from "rxjs"; //Recoge la información que nos devuelve el API REST cuando hacemos una petición
+
+@Injectable() //Utilizamos el decorador injectable, pasándole como parámetro la clase que vamos a importar sobre la clase que vamos a exportar
+export class PeticionesService{
+  public url: string; //definimos la propiedad url
+
+  constructor(
+    public _http: HttpClient //definimos el servicio _http con HttpClient para hacer peticiones AJAX
+  ) {
+    this.url = 'https://reqres.in/'; //asignamos a la propiedad url el valor correspondiente a la API dónde vamos a hacer las peticioens
+  }
+
+  getUser(){//Creamos el método getUser para que nos devuelva los usuarios de la url de la API
+    return this._http.get(this.url+'api/users/2')
+  }
+}
+```
+Ahora cargamos el servicio dentro del componente **externo.component.ts**
+```ts
+import { Component, OnInit } from '@angular/core';
+// Para poder hacer peticiones a la api en mi componente:
+// 1. importo el servicio peticiones que he creado
+// 2. lo cargo en mi array de providers
+// 3. lo inyecto dentro de una propiedad en mi constructor y nombro el servicio como _peticionesService
+// Ya puedo utilizar el servicio dentro de mi ngOnInit
+import { PeticionesService} from "../service/peticiones.service";
+
+@Component({
+  selector: 'app-externo',
+  templateUrl: './externo.component.html',
+  styleUrls: ['./externo.component.scss'],
+  providers: [PeticionesService]
+})
+export class ExternoComponent implements OnInit {
+  public user: any; //creo la propiedad user, cuyo tipado puede ser cualquiera para recoger los usuarios
+
+  constructor(
+    private _peticionesService: PeticionesService
+  ) { }
+
+  ngOnInit(){
+    //utilizo el método subscribe que me va a devolver un observable que me permite recoger el resultado que devuelve la petición AJAX
+    //El método subscribe tiene dos funciones callback:
+    // * Una recoge el resultado
+    // * La otra recoger el error
+    this._peticionesService.getUser().subscribe(
+      result => {
+        this.user = result;//Esto me va a guardar el resultado de la petición en la variable user
+      },
+      error => {
+        console.log(<any>error);
+      }
+    )
+  }
+
+}
+```
+Ya podemos dibujar en la vista del componente externo los datos he pedido a la API REST de reqres.in
+
+```html
+<p>externo works!</p>
+
+<div *ngIf="user"> <!-- Uso la directiva ngIf para que solo se cargue cuando user tenga algo-->
+  <img src="{{user.avatar}}" />
+  <h2>{{user.first_name + ' ' + user.last_name}}</h2>
+</div>
+```
+
+Podemos crear un input y usar la directiva para formularios ngModel que nos permite modificar la clase de manera instantánea para que introduzcamos el id del usuario que nos muestra por pantalla:
+
+```html
+<p>externo works!</p>
+
+<!-- Creamos un input para que nos muestre el usuario seleccionado por pantalla
+* Usamos la directiva para formularios ngModel que nos permite modificar la clase de manera instantánea para que introduzcamos el id del usuario que nos muestra por pantalla
+* Usamos el hook (keyup.enter) para que al presionar enter se ejecute el método cargaUsuario-->
+
+<input type="text" [(ngModel)]="idUsuario" (keyup.enter)="cargaUsuario()"/>
+<!-- modificamos la propiedad usario con two-way data binding-->
+
+<div *ngIf="user"> <!-- Uso la directiva ngIf para que solo se cargue cuando user tenga algo-->
+  <img src="{{user.avatar}}" />
+  <h2>{{user.first_name + ' ' + user.last_name}}</h2>
+</div>
+```
+En externo.component.ts:
+* Creo la propiedad idUsuario dentro de la clase y le doy un valor predeterminado
+* Creo el método cargaUsuario
+
+```ts
+//...
+export class ExternoComponent implements OnInit {
+
+  public user: any; //creo la propiedad user, cuyo tipado puede ser cualquiera para recoger los usuarios
+  public idUsuario: number;
+
+  constructor(
+    private _peticionesService: PeticionesService
+  ) { 
+    this.idUsuario = 1; //le damos por defecto el valor 1
+  }
+
+  ngOnInit(){
+    //utilizo el método subscribe que me va a devolver un observable que me permite recoger el resultado que devuelve la petición AJAX
+    //El método subscribe tiene dos funciones callback:
+    // * Una recoge el resultado
+    // * La otra recoger el error
+
+    //LO CAMBIAMOS PARA QUE SE CARGUE CUANDO USEMOS EL MÉTODO cargaUsuario()
+    /*
+    this._peticionesService.getUser().subscribe(
+      result => {
+        this.user = result.data;//Esto me va a guardar el resultado de la petición en la variable user
+        console.log(this.user);
+      },
+      error => {
+        console.log(<any>error);
+      }
+    )
+     */
+    this.cargaUsuario();
+  }
+
+  //Creo este método para que cuándo presione la letra enter en mi input se me cargue el usuario
+  cargaUsuario(){
+    this._peticionesService.getUser().subscribe(
+      result => {
+        this.user = result.data;//Esto me va a guardar el resultado de la petición en la variable user
+        console.log(this.user);
+      },
+      error => {
+        console.log(<any>error);
+      }
+    )
+
+  }
+
+}
+```
+
+Cambio mi servicio de peticiones para poder pedir usuarios a través del formulario:
+
+**peticiones.service.ts**
+```ts
+/*
+  getUser(): Observable<any>{//Creamos el método getUser para que nos devuelva los usuarios de la url de la API
+    return this._http.get(this.url+'api/users/2')
+  }
+*/
+  //Modifico getUser para que no siempre me devuelva el usuario 2 sino el que yo le pida en mi formulario de externo.component.html
+  getUser(idUsuario): Observable<any>{//Creamos el método getUser para que nos devuelva los usuarios de la url de la API
+    return this._http.get(this.url+'api/users/' + idUsuario)
+  }
+```
+Cambio mi método cargaUsuario de externo.component.ts
+```ts
+ cargaUsuario(){
+    //this._peticionesService.getUser().subscribe( 
+    // añado parámetros a getUser para poder elegir el usuario que quiero que dibuje desde el input
+    this._peticionesService.getUser(this.idUsuario).subscribe(
+```
+
 ### 12.3 Efecto de Carga
