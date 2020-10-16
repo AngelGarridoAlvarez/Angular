@@ -1,35 +1,13 @@
 # Angular
 
-Todos los archivos de este repositorio han sido completamente escritos por Ángel Garrido Álvarez. En estos documentos repaso los fundamentos de Angular que quedan reflejados en este archivo README.md que explica lo que se ha hecho en la carpeta learningAngular.
+Todos los archivos de este repositorio han sido escritos integramente por Ángel Garrido Álvarez. En estos documentos repaso los fundamentos de Angular que quedan reflejados en este archivo README.md que explica lo que se ha hecho en la carpeta learningAngular.
 
 El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender JS, jQuery, Angular, NodeJS](https://www.udemy.com/course/master-en-javascript-aprender-js-jquery-angular-nodejs-y-mas/) de Víctor Robles, por lo que la mayor parte del contenido proviene de esta fuente.
 
-## Sobre Angular
-
-AngularJS (comúnmente llamado Angular.js o AngularJS 1), es un framework de JavaScript de código abierto, mantenido por Google, que se utiliza para crear y mantener aplicaciones web de una sola página. Su objetivo es aumentar las aplicaciones basadas en navegador con capacidad de Modelo Vista Controlador (MVC), en un esfuerzo para hacer que el desarrollo y las pruebas sean más fáciles.
-
-La biblioteca lee el HTML que contiene atributos de las etiquetas personalizadas adicionales, entonces obedece a las directivas de los atributos personalizados, y une las piezas de entrada o salida de la página a un modelo representado por las variables estándar de JavaScript. Los valores de las variables de JavaScript se pueden configurar manualmente, o recuperados de los recursos JSON estáticos o dinámicos.
-
-AngularJS se puede combinar con el entorno en tiempo de ejecución Node.js, el framework para servidor Express.js y la base de datos MongoDB para formar el conjunto MEAN.
-[Fuente](https://es.wikipedia.org/wiki/AngularJS)
-
-
-Angular no tiene un modelo-vista-controlador (MVC) clásico, sino que el modelo tiene mucha relación con la vista.
-
-Esto es así por el concepto base de Angular de two-way data binding, ya que la forma de sincronizar los datos entre la vista y el modelo-vista es totalmente dependiente, es decir, en la vista podemos modificar el modelo y en el modelo podemos modificar la vista.
-
-Esto hace que la independencia que se produce en un modelo-vista-controlador clásico aquí no se produzca, y por lo tanto tiende a llamarse modelo-vista vista-modelo (MVVM) o bien modelo-vista-whatever (MVW), porque no se sabe muy bien dónde identificarlo.
-
-Aquí es dónde se produce el debate, ya que precisamente por la propiedad de two-way data binding, es difícil determinar qué modelo aplicar.
-
-También existe el modelo como lógica de negocio, como pueden ser los servicios o todo aquello que se inyecte, que podemos considerar modelo, y que está totalmente independizado de la vista.
-
-Sin embargo, todo el aspecto sobre el modelo-vista es totalmente dependiente, y por lo tanto, por eso existe el debate de cómo considerar a este framework
-
-[Fuente](https://openwebinars.net/blog/que-patron-usa-angular-mvc-o-mvvm/)
+![img](img/Captura%20de%20pantalla%202020-10-16%20123228.png)
 
 ## INDICE
-
+0. [Sobre Angular JS](#id0)
 1. [Principaes comandos de Angular](#id1)
 2. [Estructura de archivos Angular](#id2)
 3. [Elementos que conforman una APP de Angular](#id3)
@@ -59,8 +37,36 @@ Sin embargo, todo el aspecto sobre el modelo-vista es totalmente dependiente, y 
     * Pipes personalizados
 
 14. [Formularios](#id14)
+    * Crear formulario y recoger sus datos
+    * Validar formularios
+
+15. [Ejericio Formularios, AJAX y HTTP Post](#id15)
 
 
+## 0. Sobre Angular <a name="id0"></a>
+
+AngularJS (comúnmente llamado Angular.js o AngularJS 1), es un framework de JavaScript de código abierto, mantenido por Google, que se utiliza para crear y mantener aplicaciones web de una sola página. Su objetivo es aumentar las aplicaciones basadas en navegador con capacidad de Modelo Vista Controlador (MVC), en un esfuerzo para hacer que el desarrollo y las pruebas sean más fáciles.
+
+La biblioteca lee el HTML que contiene atributos de las etiquetas personalizadas adicionales, entonces obedece a las directivas de los atributos personalizados, y une las piezas de entrada o salida de la página a un modelo representado por las variables estándar de JavaScript. Los valores de las variables de JavaScript se pueden configurar manualmente, o recuperados de los recursos JSON estáticos o dinámicos.
+
+AngularJS se puede combinar con el entorno en tiempo de ejecución Node.js, el framework para servidor Express.js y la base de datos MongoDB para formar el conjunto MEAN.
+
+[Fuente](https://es.wikipedia.org/wiki/AngularJS)
+
+
+Angular no tiene un modelo-vista-controlador (MVC) clásico, sino que el modelo tiene mucha relación con la vista.
+
+Esto es así por el concepto base de Angular de two-way data binding, ya que la forma de sincronizar los datos entre la vista y el modelo-vista es totalmente dependiente, es decir, en la vista podemos modificar el modelo y en el modelo podemos modificar la vista.
+
+Esto hace que la independencia que se produce en un modelo-vista-controlador clásico aquí no se produzca, y por lo tanto tiende a llamarse modelo-vista vista-modelo (MVVM) o bien modelo-vista-whatever (MVW), porque no se sabe muy bien dónde identificarlo.
+
+Aquí es dónde se produce el debate, ya que precisamente por la propiedad de two-way data binding, es difícil determinar qué modelo aplicar.
+
+También existe el modelo como lógica de negocio, como pueden ser los servicios o todo aquello que se inyecte, que podemos considerar modelo, y que está totalmente independizado de la vista.
+
+Sin embargo, todo el aspecto sobre el modelo-vista es totalmente dependiente, y por lo tanto, por eso existe el debate de cómo considerar a este framework
+
+[Fuente](https://openwebinars.net/blog/que-patron-usa-angular-mvc-o-mvvm/)
 
 ## 1. Principales comandos de Angular<a name="id1"></a>
 [cli.angular.io](https://cli.angular.io/)
@@ -919,7 +925,7 @@ En **zapatillas.component.html** usamos el condicional switch para que se apliqu
 ## 8.1. Two-way Data Binding - Evento Click
 
 **[(ngModel)]**
-* Directiva para formularios que permite modificar de manera instantánea propiedades de nuestro modelo de datos (la clase de nuestro componente).
+* Directiva para formularios que permite modificar de manera instantánea propiedades de nuestro modelo de datos (la clase de nuestro componente) desde la vista.
 * Para poder usarlo, en **app.module.ts** hay que añadir **import {FormsModule} from "@angular/forms";** así como añadir FormsModule dentro del apartado imoprts:[] del mismo archivo.
 * Vamos a hacer un campo que nos permita añadir un elemento al listado de marcas que hemos creado anteriormente
 
@@ -1764,6 +1770,8 @@ Pruebo mi pipe calculadora en **externo.component.html**
 ```
 ## 14. FORMULARIOS EN ANGULAR <a name="id13"></a>
 
+### 14.1 Crear formulario y recoger en el componente lo que se envía
+
 #### Creamos el componente contacto y añadimos las rutas correspondientes
 * Creamos el componente **Contacto** para experimentar con los formularios 
 * ng g component contacto, por lo que no me hace falta hacer importaciones en **app.module.ts** ni añadirlo a mis declaraciones del decorador @NgModule()
@@ -1772,5 +1780,139 @@ Pruebo mi pipe calculadora en **externo.component.html**
     * añado el path
 * añado contacto al menú en **app.component.html**
 
-#### Creamos el modelo de datos usuario para modificar con el formulario
+#### Creamos el modelo de datos contactoUsuario para modificar con el formulario
 * Creamos **src/app/models/usuario.ts**
+```ts
+export class ContactoUsuario{
+  constructor(
+    public nombre: string,
+    public apellidos: string,
+    public email: string,
+    public mensaje: string,
+  ) {}
+}
+```
+* Ya podemos generar objetos ContactoUsuario
+* Vamos a hacer un formulario que pueda modificar objetos de tipo ContactoUsuario
+* Añadimos la propiedad contactoUsuario a nuestro **contacto.component.ts**
+
+```ts
+import { Component, OnInit } from '@angular/core';
+import {ContactoUsuario} from "../models/usuario";
+
+@Component({
+  selector: 'app-contacto',
+  templateUrl: './contacto.component.html',
+  styleUrls: ['./contacto.component.scss']
+})
+export class ContactoComponent implements OnInit {
+  public usuario: ContactoUsuario; //* Añadimos la propiedad usuario y decimos que es un objeto de tipo Usuario en nuestro contacto.component.ts
+
+  constructor() {
+    this.usuario = new ContactoUsuario('','','','')//Dejo los campos vacíos para rellenarlos con el formular
+  }
+
+  ngOnInit(): void {
+  }
+
+}
+```
+
+Ahora vamos a hacer un formulario que pueda modificar el objeto usuario que he creado a partir de la clase ContactoUsuario
+* Para convertir un formulario en formulario de angular utilizo ngForm, y le doy un nombre usando #
+* Utilizamos el hook ngSubmit para capturar el evento submit del formulario
+**contacto.component.html**
+```html
+<form #formContacto ="ngForm" (ngSubmit)="enviar()">
+  <label for="nombre">Nombre</label>  <br/>
+  <input type="text" name="nombre" />  <br/>
+
+
+  <label for="apellidos">Apellidos</label>  <br/>
+  <input type="text" name="apellidos" />  <br/>
+
+
+  <label for="email">Email</label>  <br/>
+  <input type="text" name="email" />  <br/>
+
+
+  <label for="mensaje">Mensaje</label>  <br/>
+  <textarea name="mensaje"></textarea>  <br/>
+
+
+  <input type="submit" value="enviar" />
+</form>
+```
+* Creamos el método enviar para que se ejecute cuando hagamos submit
+
+**contacto.component.ts**
+```ts
+export class ContactoComponent implements OnInit {
+//...
+enviar(){
+    console.log('evento enviar lanzado')//Cuando pulse a enviar se muestra este mensaje
+  }
+}
+```
+
+* primero tenemos que usar # para dar un nombre a cada campo del formulario y decir que son ngModel.
+    *  '#nombre="ngModel"'
+    * Luego nos sirve para hacer la validación de datos.
+    
+* Utilizamos la directiva para formularios [(ngModel)] para hacer **two-way data binding** y modificar mi modelo de datos que se encuentra en la clase del componente desde la vista del componente
+     * '[(ngModel)]="usuario.nombre"'
+     * Para poder usar ngModel, previamente hemos añadido en app.module.ts: 
+        * **import {FormsModule} from "@angular/forms";**  
+        * FormsModule dentro del apartado imoprts:[]
+*
+```html
+<p>contacto works!</p>
+
+<!-- Para convertir un formulario en formulario de angular utilizo ngForm, y le doy un nombre usando la # -->
+<!-- Utilizamos el hook ngSubmit para capturar el evento submit del formulario-->
+<!-- Creamos el método enviar para que se ejecute cuando hagamos submit-->
+
+<form #formContacto ="ngForm" (ngSubmit)="enviar()">
+  <label for="nombre">Nombre</label>  <br/>
+  <input type="text" name="nombre" #nombre="ngModel" [(ngModel)]="usuario.nombre"/>  <br/>
+
+
+  <label for="apellidos">Apellidos</label>  <br/>
+  <input type="text" name="apellidos" #apellidos="ngModel" [(ngModel)]="usuario.apellidos"/>  <br/>
+
+
+  <label for="email">Email</label>  <br/>
+  <input type="text" name="email" #email="ngModel" [(ngModel)]="usuario.email"/>  <br/>
+
+
+  <label for="mensaje">Mensaje</label>  <br/>
+  <textarea name="mensaje" #mensaje="ngModel" [(ngModel)]="usuario.mensaje"></textarea>  <br/>
+
+
+  <input type="submit" value="enviar" />
+</form>
+
+<!-- Creamos este dato para que con el two-way data binding veamos como se rellena en tiempo real -->
+
+Nombre: {{usuario.nombre}} <br>
+apellidos: {{usuario.apellidos}} <br>
+email: {{usuario.email}} <br>
+mensaje: {{usuario.mensaje}} <br>
+```
+### 14.2 Validar formularios en Angular
+
+## 15. Ejericio Formularios, AJAX y HTTP Post <a name="id15"></a>
+
+
+
+```html
+
+```
+
+```html
+
+```
+
+```html
+
+```
