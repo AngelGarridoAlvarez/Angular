@@ -1,1 +1,33 @@
 <p>contacto works!</p>
+
+<!-- Para convertir un formulario en formulario de angular utilizo ngForm, y le doy un nombre usando la # -->
+<!-- Utilizamos el hook ngSubmit para capturar el evento submit del formulario-->
+<!-- Creamos el método enviar para que se ejecute cuando hagamos submit-->
+
+<form #formContacto ="ngForm" (ngSubmit)="enviar()">
+  <label for="nombre">Nombre</label>  <br/>
+  <input type="text" name="nombre" #nombre="ngModel" [(ngModel)]="usuario.nombre"/>  <br/>
+
+
+  <label for="apellidos">Apellidos</label>  <br/>
+  <input type="text" name="apellidos" #apellidos="ngModel" [(ngModel)]="usuario.apellidos"/>  <br/>
+
+
+  <label for="email">Email</label>  <br/>
+  <input type="text" name="email" #email="ngModel" [(ngModel)]="usuario.email"/>  <br/>
+
+
+  <label for="mensaje">Mensaje</label>  <br/>
+  <textarea name="mensaje" #mensaje="ngModel" [(ngModel)]="usuario.mensaje"></textarea>  <br/>
+
+
+  <input type="submit" value="enviar" />
+</form>
+
+<!-- Creamos este dato para que con el two-way data binding veamos como se rellena en tiempo real -->
+
+Nombre: {{usuario.nombre}} <br>
+apellidos: {{usuario.apellidos}} <br>
+email: {{usuario.email}} <br>
+mensaje: {{usuario.mensaje}} <br>
+
