@@ -4,24 +4,38 @@
 <!-- Utilizamos el hook ngSubmit para capturar el evento submit del formulario-->
 <!-- Creamos el método enviar para que se ejecute cuando hagamos submit-->
 
-<form #formContacto ="ngForm" (ngSubmit)="enviar()">
+<form #formContacto ="ngForm" (ngSubmit)="enviar(formContacto)"> <!-- Pasamos los datos recogidos en el formContacto el método enviar, para que este los resetee una vez enviados -->
   <label for="nombre">Nombre</label>  <br/>
-  <input type="text" name="nombre" #nombre="ngModel" [(ngModel)]="usuario.nombre"/>  <br/>
+  <input type="text" name="nombre" #nombre="ngModel" [(ngModel)]="usuario.nombre" required pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"/>
+  <span *ngIf="!nombre.valid && nombre.touched" style="color: red"><!-- si el nombre no es valido y ha sido seleccionado (tocado) previamente mostrará el span, adicionalmente tiene que estar compuesto por letras-->
+    El nombre es obligatorio y solo pueden ser letras
+  </span>
+  <br/>
 
 
   <label for="apellidos">Apellidos</label>  <br/>
-  <input type="text" name="apellidos" #apellidos="ngModel" [(ngModel)]="usuario.apellidos"/>  <br/>
-
+  <input type="text" name="apellidos" #apellidos="ngModel" [(ngModel)]="usuario.apellidos" required pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"/>
+  <span *ngIf="!apellidos.valid && apellidos.touched" style="color: red">
+    Apellidos son obligatorios y solo aceptan letras
+  </span>
+  <br/>
 
   <label for="email">Email</label>  <br/>
-  <input type="text" name="email" #email="ngModel" [(ngModel)]="usuario.email"/>  <br/>
-
+  <input type="text" name="email" #email="ngModel" [(ngModel)]="usuario.email" required/>
+  <span *ngIf="!email.valid && email.touched" style="color: red">
+    El campo email no es valido
+  </span>
+  <br/>
 
   <label for="mensaje">Mensaje</label>  <br/>
-  <textarea name="mensaje" #mensaje="ngModel" [(ngModel)]="usuario.mensaje"></textarea>  <br/>
+  <textarea name="mensaje" #mensaje="ngModel" [(ngModel)]="usuario.mensaje" required></textarea>
+  <span *ngIf="!mensaje.valid && mensaje.touched" style="color: red">
+    El mensaje es obligatorio
+  </span>
+  <br/>
 
+  <input type="submit" value="enviar" [disabled]="!formContacto.form.valid" />
 
-  <input type="submit" value="enviar" />
 </form>
 
 <!-- Creamos este dato para que con el two-way data binding veamos como se rellena en tiempo real -->

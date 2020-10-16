@@ -16,9 +16,11 @@ export class ContactoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  enviar(){
-    console.log('evento enviar lanzado')//Cuando pulse a enviar se muestra este mensaje
-    console.log(this.usuario)//Me recoge el objeto usuario que se ha lanzado
+  enviar(form){ //* El parámetro que me llega desde la vista lo reseteo para que cada vez que de ha enviar se vacíen los campos
+    form.reset();//Uso el método reset para limpiar el formulario
+    console.log('evento enviar lanzado');//Cuando pulse a enviar se muestra este mensaje
+    console.log(this.usuario);//Me recoge el objeto usuario que se ha lanzado
+    alert('Formulario enviado correctamente')
   }
 
 }

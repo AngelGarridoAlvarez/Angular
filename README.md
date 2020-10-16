@@ -1901,18 +1901,50 @@ mensaje: {{usuario.mensaje}} <br>
 ```
 ### 14.2 Validar formularios en Angular
 
+* Son las mismas reglas de validación que HTML5
+* Si ponemos required el campo pasa a ser obligatorio
+```html
+ <input type="text" name="nombre" #nombre="ngModel" [(ngModel)]="usuario.nombre" required />
+```
+* Podemos hacer un span con la directiva *ngIf para que aparezca un texto sólo cuando el nombre no sea valido
+```html
+<span *ngIf="!nombre.valid && nombre.touched" style="color: red">
+```
+* Si ponemos touched significa que el campo previamente ha tenido que ser seleccionado
+* Podemos unir ambas condiciones:
+```html
+<span *ngIf="!nombre.valid && nombre.touched" style="color: red">
+```
+* Se pueden crear patrones que tiene que seguir, pattern="[a-zA-Z]+"por ejemplo que sean letras de la a la z tanto mayúsculas como minúsculas y que se pueda repetir un número indefinido de veces
+* Para que admita tildes y ñ se complica la expresión pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"
+```html
+  <input type="text" name="nombre" #nombre="ngModel" [(ngModel)]="usuario.nombre" required pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"/>
+```
+Aunque ahora me está mostrando mensajes cuando la información introducida en los campos no tienen el formato deseado, el formulario me deja enviar la información, por lo que tengo que **deshabilitar la función de enviar hasta que todos los campos sean correctos:**
+* Usamos la directiba de atributo [disabled]="!formContacto.form.valid"
+```html
+    <input type="submit" value="enviar" [disabled]="!formContacto.form.valid" />
+```
+
+* Vaciar el formulario una vez enviado los datos
+
+Pasamos la variable form.contacto en el formulario al método enviar:
+**contacto.component.html**
+```html
+<form #formContacto ="ngForm" (ngSubmit)="enviar(formContacto)"> <!-- Pasamos los datos recogidos en el formContacto el método enviar, para que este los resetee una vez enviados -->
+```
+* El parámetro que me llega desde la vista lo reseteo para que cada vez que de ha enviar se vacíen los campos
+```ts
+  enviar(form){
+    form.reset();//Uso el método reset para limpiar el formulario
+    console.log('evento enviar lanzado');//Cuando pulse a enviar se muestra este mensaje
+    console.log(this.usuario);//Me recoge el objeto usuario que se ha lanzado
+    alert('Formulario enviado correctamente')
+  }
+```
+
 ## 15. Ejericio Formularios, AJAX y HTTP Post <a name="id15"></a>
 
 
 
-```html
 
-```
-
-```html
-
-```
-
-```html
-
-```
