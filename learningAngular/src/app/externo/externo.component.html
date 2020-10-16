@@ -1,4 +1,12 @@
 <p>externo works!</p>
+<hr>
+<p>{{'HOLA MUNDO USANDO PIPES' | lowercase}}</p> <!-- pasar texto a minúsculas -->
+<p>{{fecha | date:'fullDate' | uppercase }}</p> <!-- pasar texto a mayúsculas -->
+<p>{{fecha | date:'dd/MM/yy - hh:mm'}}</p>
+<p> Usando mi pipe calculadora con el número 4 y pasando como valorDos el número 2 obtengo:</p>
+<p> {{ 4 | calculadora: 2}}</p>
+<hr>
+
 <p>Introduce un número de usuario del 1 al 1</p>
 
 <!-- Creamos un efecto de carga para cuando user no tenga datos ya que es al ser una petición asíncrona puede tardar en recibir los datos-->

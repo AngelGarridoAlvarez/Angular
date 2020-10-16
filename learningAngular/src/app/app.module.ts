@@ -13,9 +13,11 @@ import { HomeComponent } from './home/home.component';
 import { Home2Component} from "./home2/home2.component";
 import { GoBackComponent } from './go-back/go-back.component';
 import { ExternoComponent } from './externo/externo.component';
+import { CalculadoraPipe} from "./pipes/calculadora.pipe";
+import { ContactoComponent } from './contacto/contacto.component';
 
 @NgModule({
-  declarations: [
+  declarations: [ //Aquí ponemos las declaraciones que yo hago y que no están por defecto en angular
     AppComponent,
     VideogameComponent,
     ZapatillasComponent,
@@ -23,14 +25,16 @@ import { ExternoComponent } from './externo/externo.component';
     HomeComponent,
     Home2Component,
     GoBackComponent,
-    ExternoComponent
+    ExternoComponent,
+    CalculadoraPipe,//es una declaración que yo he hecho, el pipe que yo he creado
+    ContactoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     routing,
-    HttpClientModule //modulo para poder hacer peticiones http
+    HttpClientModule, //modulo para poder hacer peticiones http
   ],
   providers: [
     appRoutingProviders

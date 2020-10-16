@@ -16,6 +16,7 @@ export class ExternoComponent implements OnInit {
 
   public user: any; //creo la propiedad user, cuyo tipado puede ser cualquiera para recoger los usuarios
   public idUsuario: number;
+  public fecha: any; //creamos esta propiedad para probar los pipes de formateo de fecha
 
   constructor(
     private _peticionesService: PeticionesService
@@ -23,7 +24,8 @@ export class ExternoComponent implements OnInit {
     this.idUsuario = 1; //le damos por defecto el valor 1
   }
 
-  ngOnInit(){
+  ngOnInit() {
+    this.fecha = new Date(2018, 6, 28,9,30);//Puedo pasar un día exacto o que coja la fecha actual si no relleno nada
     //utilizo el método subscribe que me va a devolver un observable que me permite recoger el resultado que devuelve la petición AJAX
     //El método subscribe tiene dos funciones callback:
     // * Una recoge el resultado

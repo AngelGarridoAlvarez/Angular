@@ -4,6 +4,29 @@ Todos los archivos de este repositorio han sido completamente escritos por Ánge
 
 El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender JS, jQuery, Angular, NodeJS](https://www.udemy.com/course/master-en-javascript-aprender-js-jquery-angular-nodejs-y-mas/) de Víctor Robles, por lo que la mayor parte del contenido proviene de esta fuente.
 
+## Sobre Angular
+
+AngularJS (comúnmente llamado Angular.js o AngularJS 1), es un framework de JavaScript de código abierto, mantenido por Google, que se utiliza para crear y mantener aplicaciones web de una sola página. Su objetivo es aumentar las aplicaciones basadas en navegador con capacidad de Modelo Vista Controlador (MVC), en un esfuerzo para hacer que el desarrollo y las pruebas sean más fáciles.
+
+La biblioteca lee el HTML que contiene atributos de las etiquetas personalizadas adicionales, entonces obedece a las directivas de los atributos personalizados, y une las piezas de entrada o salida de la página a un modelo representado por las variables estándar de JavaScript. Los valores de las variables de JavaScript se pueden configurar manualmente, o recuperados de los recursos JSON estáticos o dinámicos.
+
+AngularJS se puede combinar con el entorno en tiempo de ejecución Node.js, el framework para servidor Express.js y la base de datos MongoDB para formar el conjunto MEAN.
+[Fuente](https://es.wikipedia.org/wiki/AngularJS)
+
+
+Angular no tiene un modelo-vista-controlador (MVC) clásico, sino que el modelo tiene mucha relación con la vista.
+
+Esto es así por el concepto base de Angular de two-way data binding, ya que la forma de sincronizar los datos entre la vista y el modelo-vista es totalmente dependiente, es decir, en la vista podemos modificar el modelo y en el modelo podemos modificar la vista.
+
+Esto hace que la independencia que se produce en un modelo-vista-controlador clásico aquí no se produzca, y por lo tanto tiende a llamarse modelo-vista vista-modelo (MVVM) o bien modelo-vista-whatever (MVW), porque no se sabe muy bien dónde identificarlo.
+
+Aquí es dónde se produce el debate, ya que precisamente por la propiedad de two-way data binding, es difícil determinar qué modelo aplicar.
+
+También existe el modelo como lógica de negocio, como pueden ser los servicios o todo aquello que se inyecte, que podemos considerar modelo, y que está totalmente independizado de la vista.
+
+Sin embargo, todo el aspecto sobre el modelo-vista es totalmente dependiente, y por lo tanto, por eso existe el debate de cómo considerar a este framework
+
+[Fuente](https://openwebinars.net/blog/que-patron-usa-angular-mvc-o-mvvm/)
 
 ## INDICE
 
@@ -30,7 +53,12 @@ El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender
     * Crear servicios
     * Servicios y HttpClient
     * Efecto de Carga
-13. [Pipes](#id13)
+13. [Pipes / Filtros](#id13)
+    * Formatear fecha
+    * Transformación de textos
+    * Pipes personalizados
+
+14. [Formularios](#id14)
 
 
 
@@ -59,10 +87,44 @@ ng serve
     * src/app: donde vamos a crear los componentes.
 
 ## 3. Elementos que conforman una APP de Angular:<a name="id3"></a>
+
+* Módulos:
+    * Son contenedores para almacenar los componentes y servicios de una aplicación.
+    * En Angular cada programa se puede ver como un árbol de módulos jerárquico.
+    * A partir de un módulo raíz se enlazan otros módulos en un proceso llamado importación.
+    * En Angular los módulos se declaran como clases de TypeScript. 
+    * Estas clases, habitualmente vacías, son decoradas con la función especial @NgModule(). 
+    * La función @NgModule() recibe un objeto como único argumento. 
+    * En las propiedades de ese objeto es donde se configura el módulo.
+```ts
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
 * Componentes: 
-    * elemento que cómpone la página SPA de Ángular
-    * es una especie de controlador de la APP
-    * cada componente va a tener una función
+    * Los módulos son contenedores. Lo primero que vamos a guardar en ellos serán componentes. 
+    * Los componentes son los bloques básicos de construcción de las páginas web en Angular. 
+    * Contienen una parte visual en html (la Vista) y una funcional en Typescript (el Controlador).
+    * **Anatomía del Componente**:
+        * Los componentes son clases TypeScript decoradas con funciones específicas como @Component. 
+        * @Component() recibe un objeto de definición de componente. 
+        * Igual que en el caso de los módulos contiene las propiedades en las que configurar el componente.
+        
+```ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'ab-root',
+  templateUrl: './app.component.html',
+  styles: []
+})
+export class AppComponent {}
+      
+```
 
 * Plantillas
     * Ficheros HTML
@@ -858,7 +920,7 @@ En **zapatillas.component.html** usamos el condicional switch para que se apliqu
 
 **[(ngModel)]**
 * Directiva para formularios que permite modificar de manera instantánea propiedades de nuestro modelo de datos (la clase de nuestro componente).
-* Para poder usarlo, en **app.modules.ts** hay que añadir **import {FormsModule} from "@angular/forms";** así como añadir FormsModule dentro del apartado imoprts:[] del mismo archivo.
+* Para poder usarlo, en **app.module.ts** hay que añadir **import {FormsModule} from "@angular/forms";** así como añadir FormsModule dentro del apartado imoprts:[] del mismo archivo.
 * Vamos a hacer un campo que nos permita añadir un elemento al listado de marcas que hemos creado anteriormente
 
 Creamos la propiedad miMarca dentro de la clase ZapatillasComponent
@@ -1612,4 +1674,103 @@ Para que se vea el mensaje de cargando del externo.component.html al cambiar de 
 
 
 
-## 13. PIPES <a name="id13"></a>
+## 13. PIPES / FILTROS <a name="id13"></a>
+
+* Son funcionalidades que se utilizan en la vista para realización de tareas
+* Ejemplos: formatear fechas, cambiar de minúsculas a mayúsculas.
+* Puedes descargarte pipes o hacerlos tu mismo
+
+### 13.1 Pipes de fechas
+
+* Vamos a utilizarlo con nuestro componente externo
+
+**externo.component.ts**
+```ts
+export class ExternoComponent implements OnInit {
+  //...
+  public fecha: any; //creamos esta propiedad para probar los pipes de formateo de fecha
+  //...
+  ngOnInit(){
+    this.fecha = new Date(1980, 9, 25);//Puedo pasar un día exacto o que coja la fecha actual si no relleno nada
+    //...
+  }
+}
+```
+Incorporamos la fecha a nuestra vista en **externo.component.html** y utilizamos el carácter pipe "|" para darle un formato predefinido o uno que elijamos nosotros
+```html
+<hr>
+<p>{{fecha | date:'fullDate'}}</p>
+<p>{{fecha | date:'dd/MM/yy - hh:mm'}}</p>
+<hr>
+```
+
+Hay paquetes como el moment que incluyen muchas pipes predefinidas
+
+### 13.2 Pipes de transformación de texto
+
+**externo.component.html**
+```html
+<p>{{'HOLA MUNDO USANDO PIPES' | lowercase}}</p> <!-- pasar texto a minúsculas -->
+<p>{{fecha | date:'fullDate' | uppercase }}</p> <!-- pasar texto a mayúsculas -->
+```
+
+### 13.3 Pipes personalizados
+
+* Creo mi carpeta pipes en src/app/pipes
+* Creo mi archivo de pipe personalizada **calculadora.pipe.ts**
+* Importo los módulos de las pipes
+* Uso el decorador Pipe
+```ts
+import { Pipe, PipeTransform} from "@angular/core";//Necesario para crear Pipes
+
+//Uso decorador pipe
+@Pipe({
+  name: 'calculadora' //nombre que le voy a dar a mi pipe
+})
+export class CalculadoraPipe implements PipeTransform{
+  // dato | calculadora: otroDato
+  // param1              param2
+//Usamos el método transform al que le tengo que pasar un valor y x argumentos:
+  transform(valor: any, valorDos: any){
+    let operaciones = `
+    Suma: ${valor + valorDos} //
+    Resta: ${valor - valorDos} //
+    Multiplicación: ${valor * valorDos} //
+    División: ${valor / valorDos}
+    `;
+    return operaciones;
+  }
+}
+```
+
+**app.module.ts**
+```ts
+//...
+import { CalculadoraPipe} from "./pipes/calculadora.pipe";
+//...
+@NgModule({
+  declarations: [ //Aquí ponemos las declaraciones que yo hago y que no están por defecto en angular
+   //..
+    CalculadoraPipe //es una declaración que yo he hecho, el pipe que yo he creado
+  ],
+//...
+})
+```
+
+Pruebo mi pipe calculadora en **externo.component.html**
+```html
+<p> Usando mi pipe calculadora con el número 4 obtengo</p>:
+<p> {{ 4 | calculadora: 2}}</p>
+```
+## 14. FORMULARIOS EN ANGULAR <a name="id13"></a>
+
+#### Creamos el componente contacto y añadimos las rutas correspondientes
+* Creamos el componente **Contacto** para experimentar con los formularios 
+* ng g component contacto, por lo que no me hace falta hacer importaciones en **app.module.ts** ni añadirlo a mis declaraciones del decorador @NgModule()
+* creo una nueva ruta usando **app.routing.ts**
+    * Hago el import del componente
+    * añado el path
+* añado contacto al menú en **app.component.html**
+
+#### Creamos el modelo de datos usuario para modificar con el formulario
+* Creamos **src/app/models/usuario.ts**
