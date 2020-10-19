@@ -1,8 +1,8 @@
 # Angular
 
-Todos los archivos de este repositorio han sido escritos integramente por Ángel Garrido Álvarez. En estos documentos repaso los fundamentos de Angular que quedan reflejados en este archivo README.md que explica lo que se ha hecho en la carpeta learningAngular.
-
-El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender JS, jQuery, Angular, NodeJS](https://www.udemy.com/course/master-en-javascript-aprender-js-jquery-angular-nodejs-y-mas/) de Víctor Robles, por lo que la mayor parte del contenido proviene de esta fuente.
+En este repositorio repaso los fundamentos de Angular que quedan reflejados en este archivo README.md que explica lo que se ha hecho en la carpeta learningAngular.
+El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender JS, jQuery, Angular, NodeJS](https://www.udemy.com/course/master-en-javascript-aprender-js-jquery-angular-nodejs-y-mas/) de Víctor Robles, por lo que la mayor parte del contenido ha sido codificado siguiendo sus indicaciones.
+El código ha sido variado para adaptarlo a mis preferencias personales y se han añadido conceptos  provenientes de otras fuentes así como de creación propia.
 
 ![img](img/Captura%20de%20pantalla%202020-10-16%20123228.png)
 
