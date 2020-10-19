@@ -26,4 +26,36 @@
   <h2>{{user.first_name + ' ' + user.last_name}}</h2>
 </div>
 
+<hr>
+<h2>Crear usuario</h2>
 
+<!-- creo el método enviar() en mi componente externo.component.ts y lo añado a mi formulario con el valor newUser para resetearlo)-->
+<!-- creo el formulario al que llamo #newUser y  para convertir un formulario en formulario de angular utilizo ngForm-->
+
+<form #newUser="ngForm" (ngSubmit)="enviar(newUser)">
+  <p>
+    <label for="name">Nombre</label>
+    <input type="text" name="name" #name="ngModel" [(ngModel)]="new_user.name" required/>
+    <span *ngIf="name.touched && !name.valid">
+      El nombre no es valido
+    </span>
+  </p>
+
+  <p>
+    <label for="job">Trabajo</label>
+    <input type="text" name="job" #job="ngModel" [(ngModel)]="new_user.job" required/>
+    <span *ngIf="job.touched && !job.valid">
+      El trabajo no es valido
+    </span>
+  </p>
+
+  <input type="submit" value="Guardar Usuario" [disabled]="!newUser.form.valid" />
+
+</form>
+
+<!-- creo un div que solo se rellene cuando exista la propiedad usuario guardado-->
+<div *ngIf="usuario_guardado">
+  <h2> El usuario se ha guardado correctamente</h2>
+  <h3>{{usuario_guardado.name}}</h3>
+  <h4>{{usuario_guardado.job}}</h4>
+</div>

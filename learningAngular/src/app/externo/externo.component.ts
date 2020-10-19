@@ -17,11 +17,17 @@ export class ExternoComponent implements OnInit {
   public user: any; //creo la propiedad user, cuyo tipado puede ser cualquiera para recoger los usuarios
   public idUsuario: number;
   public fecha: any; //creamos esta propiedad para probar los pipes de formateo de fecha
+  public new_user: any;//creo el objeto new_user con los campos que me indica la API para poder rellenarlo y hacer el post
+  public usuario_guardado;//creo usuario guardado y le asigno un valor en el método enviar() para que cuando esta propiedad esté rellena se me muestre un div para lo que usamos ngIf en externo.component.html
 
   constructor(
     private _peticionesService: PeticionesService
   ) {
     this.idUsuario = 1; //le damos por defecto el valor 1
+    this.new_user = {
+      "name": "",
+      "job": "",
+    }
   }
 
   ngOnInit() {
@@ -60,7 +66,19 @@ export class ExternoComponent implements OnInit {
         console.log(<any>error);
       }
     )
+  }
 
+  enviar(form){
+    this._peticionesService.addUser(this.new_user).subscribe(
+      response => {
+        console.log(response);
+        this.usuario_guardado = response;//con este método asigno el valor response que obtenfo de mi servicio peticiones.service.ts cuando hago una petición post con mi formulario de añadir usuario
+        form.reset() //para resetear el formulario cuando me llegue la response
+      },
+      error => {
+        console.log(<any>error);
+      }
+    )
   }
 
 }

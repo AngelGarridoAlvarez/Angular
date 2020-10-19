@@ -23,4 +23,18 @@ export class PeticionesService{
     return this._http.get(this.url+'api/users/' + idUsuario)
   }
 
+  //Creamos el método addUser para añadir usuarios:
+  // * Al método le vamos a pasar un objeto de tipo user
+  //    * le vamos a pasar datos en formato json
+  // * addUser va a devolver un Observable de tipo any
+  // *Los headers son parte de la petición http que el navegador realiza al servidor
+  //        * Sirven para configurar comportamientos o dejar marcas con información
+
+  addUser(user): Observable<any>{
+    let params = JSON.stringify(user); //Llamamos params al objeto de JS user convertido a json string
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');//hay que indicar cabeceras
+
+    return this._http.post(this.url + 'api/users', params, {headers: headers}) //Enviamos nuestra petición por post
+  }
+
 }

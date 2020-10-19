@@ -29,7 +29,7 @@ El contenido se ha redactado mientras cursaba el [Master en JavaScript: Aprender
     * Then - If else
 12. [Servicios HTTP Y Ajax](#id12)
     * Crear servicios
-    * Servicios y HttpClient
+    * Servicios y HttpClient - peticiones GET
     * Efecto de Carga
 13. [Pipes / Filtros](#id13)
     * Formatear fecha
@@ -1452,12 +1452,20 @@ export class ZapatillasComponent {
 
 
 
-### 12.2 Servicios y HttpClient
+### 12.2 Servicios y HttpClient - peticiones GET
 * Hacer peticiones AJAX a un servicio externo / API REST externo
 * Se puede hacer con dos módulos:
     * http client module
     * http module (está en desuso)
 
+#### Concepto Observable:
+* En Angular somos capaces de usar un almacén de datos y, cuando se modifica ese almacén, recibir automáticamente sus cambios, sin que tengamos que programar a mano ese tránsito de la información.
+* Sin embargo, aunque Angular nos ahorra escribir mucho código, ésto tiene un coste en términos de rendimiento.
+* La solución aplicada en Angular 2 (y que mantienen las siguientes versiones, 4, 5...) fué usar un patrón llamado "Observable", que básicamente nos ahorra tener que hacer consultas repetitivas de acceso a la fuente de información, aumentando el rendimiento de las aplicaciones.
+* Observable: Es aquello que queremos observar, que será implementado mediante una colección de eventos o valores futuros. Un observable puede ser creado a partir de eventos de usuario derivados del uso de un formulario, una llamada HTTP, un almacén de datos, etc. Mediante el observable nos podemos suscribir a eventos que nos permiten hacer cosas cuando cambia lo que se esté observando.
+[fuente](https://desarrolloweb.com/articulos/introduccion-teorica-observables-angular.html)
+
+#### Hacer una petición AJAX
 * Creamos un nuevo componente llamado "externo" para hacer las peticiones ajax
 * Desde el directorio del proyecto "ng g component externo"
 * Añadimos el nuevo componente al routing
@@ -1513,6 +1521,41 @@ export class PeticionesService{
   }
 }
 ```
+nota* = HEADERS
+
+Cada petición HTTP que el navegador realiza al servidor, se divide en 2 partes:
+* Las cabeceras (Headers).
+    * sirven para configurar diversos comportamientos, o simplemente para dejar alguna marca con información.
+* El cuerpo de la respuesta (Response body).
+    * código HTML, CSS, Javascript... necesario para que la web funcione.
+    
+Ejemplo petición navegador
+```http request
+ GET /index.html HTTP/1.1
+ Host: www.example.com
+ User-Agent: nombre-cliente
+ [Línea en blanco]
+```
+Ejemplo respuestas
+```http request
+//Cabecera de la respuesta
+HTTP/1.1 200 OK
+Date: Fri, 31 Dec 2003 23:59:59 GMT
+Content-Type: text/html
+Content-Length: 1221
+//Cuerpo de la respuesta
+<html>
+<body>
+<h1>Página principal de tuHost</h1>
+(Contenido)
+  .
+  .
+  .
+</body>
+</html>
+```
+
+
 Ahora cargamos el servicio dentro del componente **externo.component.ts**
 ```ts
 import { Component, OnInit } from '@angular/core';
@@ -1945,6 +1988,112 @@ Pasamos la variable form.contacto en el formulario al método enviar:
 
 ## 15. Ejericio Formularios, AJAX y HTTP Post <a name="id15"></a>
 
+* Usamos https://reqres.in/
+* Haremos una petición POST en el servicio para hacer un formulario que nos permita añadir un nuevo usuario
+* Vamos a crear un nuevo formulario en el componente src/app/externo/
+* Vamos a modificar nuestro servicio **src/app/service/peticiones.service.ts**
+
+Modicamos **src/app/service/peticiones.service.ts**
+* Creamos el método addUser para añadir usuarios:
+* Al método le vamos a pasar un objeto de tipo user
+* le vamos a pasar datos en formato json
+* addUser va a devolver un Observable de tipo any
+* Los headers son parte de la petición http que el navegador realiza al servidor
+    * Sirven para configurar comportamientos o dejar marcas con información
+```ts
+//...
+@Injectable(){
+//...
+ addUser(user): Observable<any>{
+    let params = JSON.stringify(user); //Llamamos params al objeto de JS user convertido a json string
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');//hay que indicar cabeceras
+
+    return this._http.post(this.url + 'api/users', params, {headers: headers}) //Enviamos nuestra petición por post
+  }
+}
+```
+
+**src/app/externo/externo.component.ts**
+* Creo el objeto new_user con los campos que me indica la API para poder rellenarlo y hacer el post
+* Creo el método enviar() para añadirlo a mi formulario posteriormente
+
+```ts
+//...
+export class ExternoComponent implements OnInit {
+
+  public user: any; //creo la propiedad user, cuyo tipado puede ser cualquiera para recoger los usuarios
+  public idUsuario: number;
+  public fecha: any; //creamos esta propiedad para probar los pipes de formateo de fecha
+  public new_user: any;//creo el objeto new_user con los campos que me indica la API para poder rellenarlo y hacer el post
+  public usuario_guardado;//creo usuario guardado y le asigno un valor en el método enviar() para que cuando esta propiedad esté rellena se me muestre un div para lo que usamos ngIf en externo.component.html
 
 
+  constructor(
+    private _peticionesService: PeticionesService
+  ) {
+    this.idUsuario = 1; //le damos por defecto el valor 1
+    this.new_user = {
+      "name": "",
+      "job": ""
+    }
+  }
+}
+//...
+enviar(form){
+    this._peticionesService.addUser(this.new_user).subscribe(
+      response => {
+        console.log(response);
+        this.usuario_guardado = response;//con este método asigno el valor response que obtenfo de mi servicio peticiones.service.ts cuando hago una petición post con mi formulario de añadir usuario
+        form.reset() //para resetear el formulario cuando me llegue la response
+      },
+      error => {
+        console.log(<any>error);
+      }
+    )
+  }
 
+```
+
+**src/app/externo/externo.component.html**
+* Creo un formulario
+* Paso como parámetro newUser al método enviar para para resetear sus campos cada vez que introduzco un valor
+```html
+<!-- ... -->
+<hr>
+<h2>Crear usuario</h2>
+
+<!-- creo el método enviar() en mi componente externo.component.ts y lo añado a mi formulario con el valor newUser para resetearlo)-->
+<!-- creo el formulario al que llamo #newUser y  para convertir un formulario en formulario de angular utilizo ngForm-->
+
+<form #newUser="ngForm" (ngSubmit)="enviar(newUser)">
+  <p>
+    <label for="name">Nombre</label>
+    <input type="text" name="name" #name="ngModel" [(ngModel)]="new_user.name" required/>
+    <span *ngIf="name.touched && !name.valid">
+      El nombre no es valido
+    </span>
+  </p>
+
+  <p>
+    <label for="job">Trabajo</label>
+    <input type="text" name="job" #job="ngModel" [(ngModel)]="new_user.job" required/>
+    <span *ngIf="job.touched && !job.valid">
+      El trabajo no es valido
+    </span>
+  </p>
+
+  <input type="submit" value="Guardar Usuario" [disabled]="!newUser.form.valid" />
+
+</form>
+<!-- ... -->
+```
+Creo un div que solo se rellene cuando exista la propiedad usuario guardado
+```html
+<!-- ... -->
+<div *ngIf="usuario_guardado">
+  <h2> El usuario se ha guardado correctamente</h2>
+  <h3>{{usuario_guardado.name}}</h3>
+  <h4>{{usuario_guardado.job}}</h4>
+</div>
+<!-- ... -->
+```
