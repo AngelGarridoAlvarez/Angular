@@ -1813,7 +1813,7 @@ Pruebo mi pipe calculadora en **externo.component.html**
 <p> Usando mi pipe calculadora con el número 4 obtengo</p>:
 <p> {{ 4 | calculadora: 2}}</p>
 ```
-## 14. FORMULARIOS EN ANGULAR <a name="id13"></a>
+## 14. FORMULARIOS EN ANGULAR <a name="id14"></a>
 
 ### 14.1 Crear formulario y recoger en el componente lo que se envía
 
